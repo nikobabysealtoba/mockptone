@@ -2,7 +2,9 @@
     "name": "☻☻☻☻☻☻☻☻☻☻☻☻",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "Mouse+ extension by Yu-Hayate": "github:yu-hayate/Yu-hayates_Mouse#v1.0.4",
+        "arcade-sprite-util": "github:jwunderl/arcade-sprite-util#v0.4.1"
     },
     "files": [
         "main.blocks",
