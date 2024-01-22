@@ -1,7 +1,17 @@
+namespace SpriteKind {
+    export const npc = SpriteKind.create()
+}
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile1`, function (sprite, location) {
+    if (controller.B.isPressed()) {
+        tiles.setTileAt(tiles.getTileLocation(7, 36), sprites.castle.tilePath5)
+        holding = true
+        cococount = 1
+    }
+})
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingUp))
-        mySprite.setImage(img`
+        characterAnimations.setCharacterState(coconutgrabber, characterAnimations.rule(Predicate.FacingUp))
+        coconutgrabber.setImage(img`
             . . . . . . f f f f . . . . . . 
             . . . . f f e e e e f f . . . . 
             . . . f e e e e e e e e f . . . 
@@ -21,10 +31,107 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
             `)
     }
 })
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (holding && cococount > 0 && characterAnimations.matchesRule(coconutgrabber, characterAnimations.rule(Predicate.FacingLeft))) {
+        cocoshoot = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . f e e e e e e e f . . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e f e f . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b b e e e e e e e f . . . 
+            . . . f b b b b e e e f . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, coconutgrabber, -100, 0)
+        cococount += -1
+        timer.after(1000, function () {
+            sprites.destroy(cocoshoot, effects.trail, 500)
+        })
+    } else if (holding && cococount > 0 && characterAnimations.matchesRule(coconutgrabber, characterAnimations.rule(Predicate.FacingRight))) {
+        cocoshoot = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . f e e e e e e e f . . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e f e f . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b b e e e e e e e f . . . 
+            . . . f b b b b e e e f . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, coconutgrabber, 100, 0)
+        cococount += -1
+        timer.after(1000, function () {
+            sprites.destroy(cocoshoot, effects.trail, 500)
+        })
+    } else if (holding && cococount > 0 && characterAnimations.matchesRule(coconutgrabber, characterAnimations.rule(Predicate.FacingDown))) {
+        cocoshoot = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . f e e e e e e e f . . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e f e f . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b b e e e e e e e f . . . 
+            . . . f b b b b e e e f . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, coconutgrabber, 0, 100)
+        cococount += -1
+        timer.after(1000, function () {
+            sprites.destroy(cocoshoot, effects.trail, 500)
+        })
+    } else if (holding && cococount > 0 && characterAnimations.matchesRule(coconutgrabber, characterAnimations.rule(Predicate.FacingUp))) {
+        cocoshoot = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . f e e e e e e e f . . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e f e f . . . 
+            . . f e e e e e f e e e f . . . 
+            . . f e e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b e e e e e e e e f . . . 
+            . . f b b e e e e e e e f . . . 
+            . . . f b b b b e e e f . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, coconutgrabber, 0, -100)
+        cococount += -1
+        timer.after(1000, function () {
+            sprites.destroy(cocoshoot, effects.trail, 500)
+        })
+    } else {
+    	
+    }
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingLeft))
-        mySprite.setImage(img`
+        characterAnimations.setCharacterState(coconutgrabber, characterAnimations.rule(Predicate.FacingLeft))
+        coconutgrabber.setImage(img`
             . . . . f f f f f f . . . . . . 
             . . . f e e e e e e f f . . . . 
             . . f e e e e e e e e f f . . . 
@@ -46,8 +153,8 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingRight))
-        mySprite.setImage(img`
+        characterAnimations.setCharacterState(coconutgrabber, characterAnimations.rule(Predicate.FacingRight))
+        coconutgrabber.setImage(img`
             . . . . . . f f f f f f . . . . 
             . . . . f f e e e e e e f . . . 
             . . . f f e e e e e e e e f . . 
@@ -69,8 +176,8 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingDown))
-        mySprite.setImage(img`
+        characterAnimations.setCharacterState(coconutgrabber, characterAnimations.rule(Predicate.FacingDown))
+        coconutgrabber.setImage(img`
             . . . . . . f f f f . . . . . . 
             . . . . f f e e e e f f . . . . 
             . . . f f e e e e e e f f . . . 
@@ -220,17 +327,17 @@ function intro2 () {
     textSprite.setIcon(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . f . . 
-        . . f f f f f f f f f f f f f . 
-        . f f b b b b b b b c c c c f . 
-        . f b b b b c c b b b b b b f . 
-        . f f f f f f f f f f f f f f . 
-        . f c b f . f . . . . . . . . . 
-        . f b c f f . . . . . . . . . . 
-        . f b b f . . . . . . . . . . . 
-        . f b b f . . . . . . . . . . . 
-        . f f f f . . . . . . . . . . . 
+        . . . . f f f f f f f . . . . . 
+        . . . f e e e e e e e f . . . . 
+        . . f e e e e e f e e e f . . . 
+        . . f e e e e e e e f e f . . . 
+        . . f e e e e e f e e e f . . . 
+        . . f e e e e e e e e e f . . . 
+        . . f b e e e e e e e e f . . . 
+        . . f b e e e e e e e e f . . . 
+        . . f b b e e e e e e e f . . . 
+        . . . f b b b b e e e f . . . . 
+        . . . . f f f f f f f . . . . . 
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -368,7 +475,7 @@ function playersetup () {
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`level1`)
     Mouse.Setsensibility(1.33334)
-    mySprite = sprites.create(img`
+    coconutgrabber = sprites.create(img`
         . . . . . . f f f f . . . . . . 
         . . . . f f e e e e f f . . . . 
         . . . f e e e e e e e e f . . . 
@@ -386,17 +493,40 @@ function playersetup () {
         . . . . . f f f f f f . . . . . 
         . . . . . f f . . f f . . . . . 
         `, SpriteKind.Player)
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(7, 49))
-    mySprite.setStayInScreen(true)
-    scene.cameraFollowSprite(mySprite)
-    controller.moveSprite(mySprite, 100, 100)
-    game.showLongText("bad word", DialogLayout.Top)
+    tiles.placeOnTile(coconutgrabber, tiles.getTileLocation(7, 49))
+    coconutgrabber.setStayInScreen(true)
+    coconutman = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . f f f f f f f . . . . . 
+        . . . f e e e e e e e f . . . . 
+        . . f e e e e e f e e e f . . . 
+        . . f e e e e e e e f e f . . . 
+        . f f e e e e e f e e e f f . . 
+        . f f e e e e e e e e e f f . . 
+        . f f b e e e e e e e e f f . . 
+        . f f b e e e e e e e e f f . . 
+        . f f b b e e e e e e e f f . . 
+        . f . f b b b b e e e f . f . . 
+        . f . . f f f f f f f . . f . . 
+        . . . . . f . . . f . . . . . . 
+        . . . . . f . . . f . . . . . . 
+        . . . . . f . . . f . . . . . . 
+        `, SpriteKind.npc)
+    tiles.placeOnTile(coconutman, tiles.getTileLocation(5, 46))
+    scene.cameraFollowSprite(coconutgrabber)
+    controller.moveSprite(coconutgrabber, 100, 100)
+    game.showLongText("coconut grabber man you have awaken", DialogLayout.Top)
 }
+let coconutman: Sprite = null
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
 let playerspawned = 0
-let mySprite: Sprite = null
+let cocoshoot: Sprite = null
+let coconutgrabber: Sprite = null
 let intro = false
+let cococount = 0
+let holding = false
 intro2()
 let mouseanimationcycle = 0
 forever(function () {
