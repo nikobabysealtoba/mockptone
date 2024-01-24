@@ -161,28 +161,6 @@ function playersetup () {
     rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
     rotationalsprite.setStayInScreen(true)
     controller.moveSprite(rotationalsprite)
-    Mouse.DrawMouse(
-    true,
-    img`
-        . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . 
-        . . . . . . . f . . . . . . . 
-        . . . . . . . f . . . . . . . 
-        . . . . . . . f . . . . . . . 
-        . . . . . . . . . . . . . . . 
-        . . . f f f . . . f f f . . . 
-        . . . . . . . . . . . . . . . 
-        . . . . . . . f . . . . . . . 
-        . . . . . . . f . . . . . . . 
-        . . . . . . . f . . . . . . . 
-        . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . 
-        `,
-    0,
-    0
-    )
     scene.cameraFollowSprite(rotationalsprite)
     scene.setBackgroundImage(img`
         ................................................................................................................................................................
@@ -312,6 +290,7 @@ function playersetup () {
     game.showLongText("fortnite travis scott", DialogLayout.Top)
     Mouse.Setsensibility(1.33334)
 }
+let mouseanimationcycle = 0
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
 let playerspawned = 0
@@ -327,6 +306,62 @@ forever(function () {
             sprites.destroy(textSprite2)
             intro = false
             playersetup()
+        }
+    }
+})
+forever(function () {
+    if (playerspawned == 0) {
+        if (mouseanimationcycle == 0) {
+            mouseanimationcycle = 1
+            timer.after(500, function () {
+                Mouse.DrawMouse(
+                true,
+                img`
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . f f f . . . f f f . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    `,
+                0,
+                0
+                )
+            })
+            timer.after(1000, function () {
+                Mouse.DrawMouse(
+                true,
+                img`
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . f f f . . . . . . . f f f . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . f . . . . . . . 
+                    . . . . . . . . . . . . . . . 
+                    `,
+                0,
+                0
+                )
+                mouseanimationcycle = 0
+            })
         }
     }
 })
