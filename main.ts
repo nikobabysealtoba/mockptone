@@ -1,8 +1,69 @@
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile1`, function (sprite, location) {
+    tiles.setCurrentTilemap(tilemap`level5`)
+    tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(20, 39))
+    testenemy = sprites.create(img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........ffff..........
+        ........ff1111ff........
+        .......fb111111bf.......
+        .......f11111111f.......
+        ......fd11111111df......
+        ......fd11111111df......
+        ......fddd1111dddf......
+        ......fbdbfddfbdbf......
+        ......fcdcf11fcdcf......
+        .......fb111111bf.......
+        ......fffcdb1bdffff.....
+        ....fc111cbfbfc111cf....
+        ....f1b1b1ffff1b1b1f....
+        ....fbfbffffffbfbfbf....
+        .........ffffff.........
+        ...........fff..........
+        ........................
+        ........................
+        ........................
+        ........................
+        `, SpriteKind.Enemy)
+    testenemy.follow(rotationalsprite, 50)
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (true) {
+        projectile = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . 5 4 . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, rotationalsprite, 50, 50)
+        spriteutils.setVelocityAtAngle(projectile, spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite()), 150)
+    }
+    if (eee == 1) {
+        projectile = sprites.createProjectileFromSprite(assets.image`myImage1`, rotationalsprite, 50, 50)
+        spriteutils.setVelocityAtAngle(projectile, spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite()), 150)
+    }
+})
 function spriterotate () {
     angle = spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite())
     angle = spriteutils.radiansToDegrees(angle)
     rotationalsprite.setImage(scaling.rot(originalimage.clone(), angle))
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    eee += 1
+})
 function intro2 () {
     intro = true
     playerspawned = 1
@@ -158,9 +219,11 @@ function playersetup () {
     playerspawned = 0
     angle = 0
     originalimage = assets.image`myImage`
+    eee = 0
     rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
     rotationalsprite.setStayInScreen(true)
     controller.moveSprite(rotationalsprite)
+    mailbox = sprites.create(assets.image`myImage1`, SpriteKind.Food)
     scene.cameraFollowSprite(rotationalsprite)
     Mouse.DrawMouse(
     true,
@@ -309,17 +372,43 @@ function playersetup () {
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`level1`)
     tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 48))
-    game.showLongText("i hate coconuts", DialogLayout.Top)
+    game.showLongText("i loveee coconuts", DialogLayout.Top)
     Mouse.Setsensibility(1.33334)
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(projectile)
+    testenemy.setImage(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . 3 . . . . . . . . 3 . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . 3 . . . . . . . . . . . . . 
+        . . . 3 . . . . . . . . . 3 . . 
+        . . . 3 3 3 . . . . . . 3 3 . . 
+        . . . . . . 3 3 3 3 3 3 3 . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    testenemy.follow(rotationalsprite, 0)
+})
 let mouseanimationcycle = 0
+let mailbox: Sprite = null
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
 let playerspawned = 0
 let intro = false
 let originalimage: Image = null
-let rotationalsprite: Sprite = null
 let angle = 0
+let eee = 0
+let projectile: Sprite = null
+let testenemy: Sprite = null
+let rotationalsprite: Sprite = null
 intro2()
 forever(function () {
     if (intro == true) {
