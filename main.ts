@@ -1,95 +1,8 @@
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingUp))
-        mySprite.setImage(img`
-            . . . . . . f f f f . . . . . . 
-            . . . . f f e e e e f f . . . . 
-            . . . f e e e e e e e e f . . . 
-            . . f e e e e e e e e e e f . . 
-            . . f e e e e e e e e e e f . . 
-            . . f e e e e e e e e e e f . . 
-            . . f e e e e e e e e e e f . . 
-            . f e e e e e e e e e e e e f . 
-            . f e e e e e e e e e e e e f . 
-            . . f e e e e e e e e e e f . . 
-            . . . f e e e e e e e e f . . . 
-            . . e 4 f f f f f f f f 4 e . . 
-            . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-            . . 4 4 f 4 4 4 4 4 4 f 4 4 . . 
-            . . . . . f f f f f f . . . . . 
-            . . . . . f f . . f f . . . . . 
-            `)
-    }
-})
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingLeft))
-        mySprite.setImage(img`
-            . . . . f f f f f f . . . . . . 
-            . . . f e e e e e e f f . . . . 
-            . . f e e e e e e e e f f . . . 
-            . . f e e e e e e e e e f . . . 
-            . f e e e e e e e e e e f . . . 
-            . f e e f f f f e e e e f . . . 
-            . f f f e e e f f f f f f f . . 
-            . f e e 4 4 f b e 4 4 e f f . . 
-            . . f e d d f 1 4 d 4 e e f . . 
-            . . . f d d d d 4 e e e f . . . 
-            . . . f e 4 4 4 e e f f . . . . 
-            . . . f 2 2 2 e d d 4 . . . . . 
-            . . . f 2 2 2 e d d e . . . . . 
-            . . . f 5 5 4 f e e f . . . . . 
-            . . . . f f f f f f . . . . . . 
-            . . . . . . f f f . . . . . . . 
-            `)
-    }
-})
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingRight))
-        mySprite.setImage(img`
-            . . . . . . f f f f f f . . . . 
-            . . . . f f e e e e e e f . . . 
-            . . . f f e e e e e e e e f . . 
-            . . . f e e e e e e e e e f . . 
-            . . . f e e e e e e e e e e f . 
-            . . . f e e e e f f f f e e f . 
-            . . f f f f f f f e e e f f f . 
-            . . f f e 4 4 e b f 4 4 e e f . 
-            . . f e e 4 d 4 1 f d d e f . . 
-            . . . f e e e 4 d d d d f . . . 
-            . . . . f f e e 4 4 4 e f . . . 
-            . . . . . 4 d d e 2 2 2 f . . . 
-            . . . . . e d d e 2 2 2 f . . . 
-            . . . . . f e e f 4 5 5 f . . . 
-            . . . . . . f f f f f f . . . . 
-            . . . . . . . f f f . . . . . . 
-            `)
-    }
-})
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (intro == false) {
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingDown))
-        mySprite.setImage(img`
-            . . . . . . f f f f . . . . . . 
-            . . . . f f e e e e f f . . . . 
-            . . . f f e e e e e e f f . . . 
-            . . f f e e e e e e e e f f . . 
-            . . f e e e e e e e e e e f . . 
-            . . f e e f f f f f f e e f . . 
-            . . f f f f e e e e f f f f . . 
-            . f f e f b f 4 4 f b f e f f . 
-            . f e e 4 1 f d d f 1 4 e e f . 
-            . . f e e d d d d d d e e f . . 
-            . . . f e e 4 4 4 4 e e f . . . 
-            . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-            . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-            . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-            . . . . . f f f f f f . . . . . 
-            . . . . . f f . . f f . . . . . 
-            `)
-    }
-})
+function spriterotate () {
+    angle = spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite())
+    angle = angle * (180 / Math.PI)
+    rotationalsprite.setImage(scaling.rot(originalimage.clone(), angle))
+}
 function intro2 () {
     intro = true
     playerspawned = 1
@@ -243,6 +156,33 @@ function intro2 () {
 }
 function playersetup () {
     playerspawned = 0
+    angle = 0
+    originalimage = assets.image`myImage`
+    rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
+    controller.moveSprite(rotationalsprite)
+    Mouse.DrawMouse(
+    true,
+    img`
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . f f f . . . f f f . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        `,
+    0,
+    0
+    )
+    scene.cameraFollowSprite(rotationalsprite)
     scene.setBackgroundImage(img`
         ................................................................................................................................................................
         ................................................................................................................................................................
@@ -367,38 +307,18 @@ function playersetup () {
         `)
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`level1`)
-    Mouse.Setsensibility(1.33334)
-    mySprite = sprites.create(img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f e e e e f f . . . . 
-        . . . f e e e e e e e e f . . . 
-        . . f e e e e e e e e e e f . . 
-        . . f e e e e e e e e e e f . . 
-        . . f e e e e e e e e e e f . . 
-        . . f e e e e e e e e e e f . . 
-        . f e e e e e e e e e e e e f . 
-        . f e e e e e e e e e e e e f . 
-        . . f e e e e e e e e e e f . . 
-        . . . f e e e e e e e e f . . . 
-        . . e 4 f f f f f f f f 4 e . . 
-        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-        . . 4 4 f 4 4 4 4 4 4 f 4 4 . . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `, SpriteKind.Player)
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(7, 49))
-    mySprite.setStayInScreen(true)
-    scene.cameraFollowSprite(mySprite)
-    controller.moveSprite(mySprite, 100, 100)
+    tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 48))
     game.showLongText("bad word", DialogLayout.Top)
+    Mouse.Setsensibility(1.33334)
 }
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
 let playerspawned = 0
-let mySprite: Sprite = null
 let intro = false
+let originalimage: Image = null
+let rotationalsprite: Sprite = null
+let angle = 0
 intro2()
-let mouseanimationcycle = 0
 forever(function () {
     if (intro == true) {
         if (controller.A.isPressed() || (controller.right.isPressed() || (controller.down.isPressed() || controller.B.isPressed()) || (controller.up.isPressed() || controller.left.isPressed()))) {
@@ -410,58 +330,5 @@ forever(function () {
     }
 })
 forever(function () {
-    if (playerspawned == 0) {
-        if (mouseanimationcycle == 0) {
-            mouseanimationcycle = 1
-            timer.after(500, function () {
-                Mouse.DrawMouse(
-                true,
-                img`
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . f f f . . . f f f . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    `,
-                0,
-                0
-                )
-            })
-            timer.after(1000, function () {
-                Mouse.DrawMouse(
-                true,
-                img`
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . f f f . . . . . . . f f f . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . f . . . . . . . 
-                    . . . . . . . . . . . . . . . 
-                    `,
-                0,
-                0
-                )
-                mouseanimationcycle = 0
-            })
-        }
-    }
+    spriterotate()
 })
