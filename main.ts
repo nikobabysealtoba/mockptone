@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const droppeditem = SpriteKind.create()
+}
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile1`, function (sprite, location) {
     tiles.setCurrentTilemap(tilemap`level5`)
     tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(20, 39))
@@ -29,31 +32,24 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile1`, function (sprite, l
         `, SpriteKind.Enemy)
     testenemy.follow(rotationalsprite, 50)
 })
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (true) {
-        projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . 5 4 . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, rotationalsprite, 50, 50)
-        spriteutils.setVelocityAtAngle(projectile, spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite()), 150)
+sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
+    if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
+        timer.after(500, function () {
+            if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
+                itemheld = true
+                helditemsprite = otherSprite.image
+                sprites.destroy(otherSprite)
+            }
+        })
     }
-    if (eee == 1) {
-        projectile = sprites.createProjectileFromSprite(assets.image`myImage1`, rotationalsprite, 50, 50)
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (itemheld == true) {
+        itemheld = false
+        projectile = sprites.createProjectileFromSprite(helditemsprite, rotationalsprite, 50, 50)
         spriteutils.setVelocityAtAngle(projectile, spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite()), 150)
+    } else {
+    	
     }
 })
 function spriterotate () {
@@ -61,9 +57,6 @@ function spriterotate () {
     angle = spriteutils.radiansToDegrees(angle)
     rotationalsprite.setImage(scaling.rot(originalimage.clone(), angle))
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    eee += 1
-})
 function intro2 () {
     intro = true
     playerspawned = 1
@@ -219,12 +212,31 @@ function playersetup () {
     playerspawned = 0
     angle = 0
     originalimage = assets.image`myImage`
-    eee = 0
+    itemheld = false
     rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
     rotationalsprite.setStayInScreen(true)
     controller.moveSprite(rotationalsprite)
-    mailbox = sprites.create(assets.image`myImage1`, SpriteKind.Food)
+    crowbar = sprites.create(assets.image`crowbar`, SpriteKind.droppeditem)
+    bat = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . f . . 
+        . . f f f f f f f f f f f f f . 
+        . f f b b b b b b b c c c c f . 
+        . f b b b b c c b b b b b b f . 
+        . f f f f f f f f f f f f f f . 
+        . f c b f . f . . . . . . . . . 
+        . f b c f f . . . . . . . . . . 
+        . f b b f . . . . . . . . . . . 
+        . f b b f . . . . . . . . . . . 
+        . f f f f . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.droppeditem)
     scene.cameraFollowSprite(rotationalsprite)
+    tiles.placeOnTile(bat, tiles.getTileLocation(7, 48))
     Mouse.DrawMouse(
     true,
     img`
@@ -372,7 +384,6 @@ function playersetup () {
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`level1`)
     tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 48))
-    game.showLongText("i loveee coconuts", DialogLayout.Top)
     Mouse.Setsensibility(1.33334)
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -398,15 +409,17 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     testenemy.follow(rotationalsprite, 0)
 })
 let mouseanimationcycle = 0
-let mailbox: Sprite = null
+let bat: Sprite = null
+let crowbar: Sprite = null
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
-let playerspawned = 0
-let intro = false
 let originalimage: Image = null
 let angle = 0
-let eee = 0
 let projectile: Sprite = null
+let helditemsprite: Image = null
+let itemheld = false
+let playerspawned = 0
+let intro = false
 let testenemy: Sprite = null
 let rotationalsprite: Sprite = null
 intro2()
