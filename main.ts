@@ -287,7 +287,7 @@ function playersetup () {
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`level1`)
     tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 48))
-    game.showLongText("fortnite travis scott", DialogLayout.Top)
+    game.showLongText("i hate coconuts", DialogLayout.Top)
     Mouse.Setsensibility(1.33334)
 }
 let mouseanimationcycle = 0
