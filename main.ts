@@ -309,7 +309,7 @@ function playersetup () {
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`level1`)
     tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 48))
-    game.showLongText("bad word", DialogLayout.Top)
+    game.showLongText("fortnite travis scott", DialogLayout.Top)
     Mouse.Setsensibility(1.33334)
 }
 let textSprite2: TextSprite = null
