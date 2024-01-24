@@ -1,6 +1,6 @@
 function spriterotate () {
     angle = spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite())
-    angle = angle * (180 / Math.PI)
+    angle = spriteutils.radiansToDegrees(angle)
     rotationalsprite.setImage(scaling.rot(originalimage.clone(), angle))
 }
 function intro2 () {
@@ -159,6 +159,7 @@ function playersetup () {
     angle = 0
     originalimage = assets.image`myImage`
     rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
+    rotationalsprite.setStayInScreen(true)
     controller.moveSprite(rotationalsprite)
     Mouse.DrawMouse(
     true,
@@ -330,5 +331,7 @@ forever(function () {
     }
 })
 forever(function () {
-    spriterotate()
+    if (intro == false && playerspawned == 0) {
+        spriterotate()
+    }
 })
