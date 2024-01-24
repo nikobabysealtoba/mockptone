@@ -6,8 +6,7 @@
         "modded mouse": "pub:53191-82962-30336-60887",
         "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
         "arcade-text": "github:microsoft/arcade-text#v1.3.0",
-        "Timers": "github:microsoft/arcade-timers#v1.1.0",
-        "Aiming Test (fixed?)": "pub:61403-02649-94384-16873"
+        "Timers": "github:microsoft/arcade-timers#v1.1.0"
     },
     "files": [
         "main.blocks",
