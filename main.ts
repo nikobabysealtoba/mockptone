@@ -162,6 +162,28 @@ function playersetup () {
     rotationalsprite.setStayInScreen(true)
     controller.moveSprite(rotationalsprite)
     scene.cameraFollowSprite(rotationalsprite)
+    Mouse.DrawMouse(
+    true,
+    img`
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . f f f . . . f f f . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . f . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . 
+        `,
+    0,
+    0
+    )
     scene.setBackgroundImage(img`
         ................................................................................................................................................................
         ................................................................................................................................................................
@@ -314,9 +336,7 @@ forever(function () {
         if (mouseanimationcycle == 0) {
             mouseanimationcycle = 1
             timer.after(500, function () {
-                Mouse.DrawMouse(
-                true,
-                img`
+                Mouse.mouseSprite().setImage(img`
                     . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . 
@@ -332,15 +352,10 @@ forever(function () {
                     . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . 
-                    `,
-                0,
-                0
-                )
+                    `)
             })
             timer.after(1000, function () {
-                Mouse.DrawMouse(
-                true,
-                img`
+                Mouse.mouseSprite().setImage(img`
                     . . . . . . . . . . . . . . . 
                     . . . . . . . f . . . . . . . 
                     . . . . . . . f . . . . . . . 
@@ -356,10 +371,7 @@ forever(function () {
                     . . . . . . . f . . . . . . . 
                     . . . . . . . f . . . . . . . 
                     . . . . . . . . . . . . . . . 
-                    `,
-                0,
-                0
-                )
+                    `)
                 mouseanimationcycle = 0
             })
         }
