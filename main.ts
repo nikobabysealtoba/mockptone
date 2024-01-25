@@ -34,7 +34,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile1`, function (sprite, l
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
     if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
-        timer.after(500, function () {
+        timer.after(0, function () {
             if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
                 itemheld = true
                 helditemsprite = otherSprite.image
