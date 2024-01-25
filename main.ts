@@ -236,7 +236,6 @@ function playersetup () {
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.droppeditem)
     scene.cameraFollowSprite(rotationalsprite)
-    tiles.placeOnTile(bat, tiles.getTileLocation(7, 48))
     Mouse.DrawMouse(
     true,
     img`
@@ -384,6 +383,8 @@ function playersetup () {
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`level1`)
     tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 48))
+    tiles.placeOnTile(bat, tiles.getTileLocation(7, 38))
+    tiles.placeOnTile(crowbar, tiles.getTileLocation(7, 28))
     Mouse.Setsensibility(1.33334)
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
