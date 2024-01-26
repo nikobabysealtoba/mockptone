@@ -3,11 +3,8 @@ namespace SpriteKind {
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
-        story.startCutscene(function () {
-            story.printCharacterText("", "PHONE")
-        })
+        game.splash("")
     }
-    tiles.setCurrentTilemap(tilemap`level10`)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
     if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
@@ -34,34 +31,6 @@ function spriterotate () {
     angle = spriteutils.radiansToDegrees(angle)
     rotationalsprite.setImage(scaling.rot(originalimage.clone(), angle))
 }
-function the_call () {
-    game.splash("You have one new message!", "You have one new message!")
-    normal_hp = game.ask("Pick up phone?")
-    if (normal_hp == true) {
-        game.splash("The phone starts blaring. ")
-    } else {
-        game.splash("The phone starts blaring anyway, your heart feels heavy.")
-    }
-    message_roll = 1
-    if (message_roll == 1) {
-        story.startCutscene(function () {
-            controller.moveSprite(rotationalsprite, 0, 0)
-            story.printCharacterText("Hi! This is 'Dunvan' from O'Donald's Auto Parts", "PHONE")
-            story.printCharacterText("We have an order ready for you.", "PHONE")
-            story.printCharacterText("What city would you like this picked up at?", "PHONE")
-            story.showPlayerChoices("HONOLULU.", "HILO.", "HULUALOA.")
-            map_size = story.getLastAnswer()
-            story.printCharacterText("Would you like to collect your package outside?", "PHONE")
-            story.showPlayerChoices("YES.", "NO.")
-            outsideornah = story.getLastAnswer()
-            story.printCharacterText("Would you like to collect your package outside?", "PHONE")
-        })
-    } else if (message_roll == 2) {
-    	
-    } else if (message_roll == 3) {
-    	
-    }
-}
 scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
     sprites.destroy(sprite)
 })
@@ -69,30 +38,6 @@ function intro2 () {
     intro = true
     playerspawned = 1
     scene.setBackgroundImage(assets.image`background`)
-    Mouse.DrawMouse(
-    true,
-    assets.image`secondmousesmall`,
-    0,
-    0
-    )
-    Keybinds.setSimulatorKeymap(
-    Keybinds.PlayerNumber.ONE,
-    Keybinds.CustomKey.W,
-    Keybinds.CustomKey.S,
-    Keybinds.CustomKey.A,
-    Keybinds.CustomKey.D,
-    Keybinds.CustomKey.LEFT_CLICK,
-    Keybinds.CustomKey.RIGHT_CLICK
-    )
-    Keybinds.setSimulatorKeymap(
-    Keybinds.PlayerNumber.TWO,
-    Keybinds.CustomKey.UP,
-    Keybinds.CustomKey.DOWN,
-    Keybinds.CustomKey.LEFT,
-    Keybinds.CustomKey.RIGHT,
-    Keybinds.CustomKey.Q,
-    Keybinds.CustomKey.E
-    )
     textSprite = textsprite.create("HELPLINE HAWAII", 0, 1)
     textSprite.setOutline(1, 15)
     textSprite.setIcon(assets.image`titlegun`)
@@ -113,6 +58,12 @@ function playersetup () {
     crowbar = sprites.create(assets.image`crowbar`, SpriteKind.droppeditem)
     bat = sprites.create(assets.image`enemy gun`, SpriteKind.droppeditem)
     scene.cameraFollowSprite(rotationalsprite)
+    Mouse.DrawMouse(
+    true,
+    assets.image`secondmousesmall`,
+    0,
+    0
+    )
     scene.setBackgroundImage(assets.image`a`)
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`starting area`)
@@ -120,6 +71,24 @@ function playersetup () {
     tiles.placeOnTile(bat, tiles.getTileLocation(21, 9))
     tiles.placeOnTile(crowbar, tiles.getTileLocation(21, 11))
     Mouse.Setsensibility(1.33334)
+    Keybinds.setSimulatorKeymap(
+    Keybinds.PlayerNumber.ONE,
+    Keybinds.CustomKey.W,
+    Keybinds.CustomKey.S,
+    Keybinds.CustomKey.A,
+    Keybinds.CustomKey.D,
+    Keybinds.CustomKey.LEFT_CLICK,
+    Keybinds.CustomKey.RIGHT_CLICK
+    )
+    Keybinds.setSimulatorKeymap(
+    Keybinds.PlayerNumber.TWO,
+    Keybinds.CustomKey.UP,
+    Keybinds.CustomKey.DOWN,
+    Keybinds.CustomKey.LEFT,
+    Keybinds.CustomKey.RIGHT,
+    Keybinds.CustomKey.Q,
+    Keybinds.CustomKey.E
+    )
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     let testenemy: Sprite = null
@@ -132,18 +101,14 @@ let bat: Sprite = null
 let crowbar: Sprite = null
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
-let outsideornah = ""
-let map_size = ""
-let message_roll = 0
-let normal_hp = false
+let rotationalsprite: Sprite = null
 let projectile: Sprite = null
 let helditemsprite: Image = null
 let itemheld = false
 let playerspawned = 0
 let intro = false
-let rotationalsprite: Sprite = null
-let originalimage: Image = null
 let angle = 0
+let originalimage: Image = null
 intro2()
 forever(function () {
     if (intro == true) {
