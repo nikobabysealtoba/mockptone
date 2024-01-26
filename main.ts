@@ -1,11 +1,6 @@
 namespace SpriteKind {
     export const droppeditem = SpriteKind.create()
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
-    if (controller.player2.isPressed(ControllerButton.B)) {
-        game.splash("")
-    }
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
     if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
         timer.after(0, function () {
@@ -107,8 +102,8 @@ let helditemsprite: Image = null
 let itemheld = false
 let playerspawned = 0
 let intro = false
-let angle = 0
 let originalimage: Image = null
+let angle = 0
 intro2()
 forever(function () {
     if (intro == true) {
