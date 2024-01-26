@@ -2,7 +2,9 @@ namespace SpriteKind {
     export const droppeditem = SpriteKind.create()
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
-	
+    if (controller.player2.isPressed(ControllerButton.B)) {
+        game.splash("")
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
     if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
@@ -69,6 +71,24 @@ function playersetup () {
     tiles.placeOnTile(bat, tiles.getTileLocation(21, 9))
     tiles.placeOnTile(crowbar, tiles.getTileLocation(21, 11))
     Mouse.Setsensibility(1.33334)
+    Keybinds.setSimulatorKeymap(
+    Keybinds.PlayerNumber.ONE,
+    Keybinds.CustomKey.W,
+    Keybinds.CustomKey.S,
+    Keybinds.CustomKey.A,
+    Keybinds.CustomKey.D,
+    Keybinds.CustomKey.LEFT_CLICK,
+    Keybinds.CustomKey.RIGHT_CLICK
+    )
+    Keybinds.setSimulatorKeymap(
+    Keybinds.PlayerNumber.TWO,
+    Keybinds.CustomKey.UP,
+    Keybinds.CustomKey.DOWN,
+    Keybinds.CustomKey.LEFT,
+    Keybinds.CustomKey.RIGHT,
+    Keybinds.CustomKey.Q,
+    Keybinds.CustomKey.E
+    )
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     let testenemy: Sprite = null
