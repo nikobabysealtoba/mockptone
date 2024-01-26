@@ -7,6 +7,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, l
             story.printCharacterText("", "PHONE")
         })
     }
+    tiles.setCurrentTilemap(tilemap`level10`)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
     if (intro == false && playerspawned == 0 && controller.B.isPressed()) {
