@@ -34,6 +34,34 @@ function spriterotate () {
     angle = spriteutils.radiansToDegrees(angle)
     rotationalsprite.setImage(scaling.rot(originalimage.clone(), angle))
 }
+function the_call () {
+    game.splash("You have one new message!", "You have one new message!")
+    normal_hp = game.ask("Pick up phone?")
+    if (normal_hp == true) {
+        game.splash("The phone starts blaring. ")
+    } else {
+        game.splash("The phone starts blaring anyway, your heart feels heavy.")
+    }
+    message_roll = 1
+    if (message_roll == 1) {
+        story.startCutscene(function () {
+            controller.moveSprite(rotationalsprite, 0, 0)
+            story.printCharacterText("Hi! This is 'Dunvan' from O'Donald's Auto Parts", "PHONE")
+            story.printCharacterText("We have an order ready for you.", "PHONE")
+            story.printCharacterText("What city would you like this picked up at?", "PHONE")
+            story.showPlayerChoices("HONOLULU.", "HILO.", "HULUALOA.")
+            map_size = story.getLastAnswer()
+            story.printCharacterText("Would you like to collect your package outside?", "PHONE")
+            story.showPlayerChoices("YES.", "NO.")
+            outsideornah = story.getLastAnswer()
+            story.printCharacterText("Would you like to collect your package outside?", "PHONE")
+        })
+    } else if (message_roll == 2) {
+    	
+    } else if (message_roll == 3) {
+    	
+    }
+}
 scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
     sprites.destroy(sprite)
 })
@@ -104,14 +132,18 @@ let bat: Sprite = null
 let crowbar: Sprite = null
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
-let rotationalsprite: Sprite = null
+let outsideornah = ""
+let map_size = ""
+let message_roll = 0
+let normal_hp = false
 let projectile: Sprite = null
 let helditemsprite: Image = null
 let itemheld = false
 let playerspawned = 0
 let intro = false
-let angle = 0
+let rotationalsprite: Sprite = null
 let originalimage: Image = null
+let angle = 0
 intro2()
 forever(function () {
     if (intro == true) {
