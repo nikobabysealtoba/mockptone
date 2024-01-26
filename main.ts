@@ -3,8 +3,7 @@ namespace SpriteKind {
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
-        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
-        the_call()
+        game.splash("")
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
@@ -31,13 +30,6 @@ function spriterotate () {
     angle = spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite())
     angle = spriteutils.radiansToDegrees(angle)
     rotationalsprite.setImage(scaling.rot(originalimage.clone(), angle))
-}
-function the_call () {
-    game.splash("ring ring!", "ring ring!")
-    normal_hp = game.ask("Pick up phone?")
-    if (normal_hp == true) {
-    	
-    }
 }
 scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
     sprites.destroy(sprite)
@@ -109,13 +101,12 @@ let bat: Sprite = null
 let crowbar: Sprite = null
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
-let normal_hp = false
+let rotationalsprite: Sprite = null
 let projectile: Sprite = null
 let helditemsprite: Image = null
 let itemheld = false
 let playerspawned = 0
 let intro = false
-let rotationalsprite: Sprite = null
 let angle = 0
 let originalimage: Image = null
 intro2()
