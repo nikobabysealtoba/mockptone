@@ -3,25 +3,6 @@ namespace myImages {
 
     helpers._registerFactory("image", function(name: string) {
         switch(helpers.stringTrim(name)) {
-            case "image1":
-            case "myImage":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . f . . . . 
-. . . . . . . . . . . . f . . . 
-. . . f f f f f f f f f . f . . 
-. . . f . . . . . . . f . . f . 
-. . . f . . . . . . . f . . . f 
-. . . f . . . . . . . f . . . f 
-. . . f . . . . . . . f . . . f 
-. . . f . . . . . . . f . . . f 
-. . . f . . . . . . . f . . f . 
-. . . f f f f f f f f f . f . . 
-. . . . . . . . . . . . f . . . 
-. . . . . . . . . . . f . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-`;
             case "image2":
             case "myImage0":return img`
 . . . . . . f f f f f f . . . . 
@@ -943,6 +924,25 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccbcccccbccccccccccccccccccccccccccccc
+`;
+            case "image1":
+            case "myImage":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . f f f f f . . . . . . 
+. . . . . f 7 7 7 f . . . . . . 
+. . . f f f f f f f f f . . . . 
+. . . f 7 7 7 7 7 7 7 f . . . . 
+. . . f 7 7 7 7 7 7 7 f . . f . 
+. . . f 7 7 7 7 7 7 7 f . . . f 
+. . . f 7 7 7 7 7 7 7 f . . . f 
+. . . f 7 7 7 7 7 7 7 f . . f . 
+. . . f 7 7 7 7 7 7 7 f . . . . 
+. . . f f f f f f f f f . . . . 
+. . . . . f 7 7 7 f . . . . . . 
+. . . . . f f f f f . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
 `;
         }
         return null;
