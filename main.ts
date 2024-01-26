@@ -3,7 +3,9 @@ namespace SpriteKind {
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
-        game.splash("")
+        story.startCutscene(function () {
+            story.printCharacterText("", "PHONE")
+        })
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
@@ -38,6 +40,30 @@ function intro2 () {
     intro = true
     playerspawned = 1
     scene.setBackgroundImage(assets.image`background`)
+    Mouse.DrawMouse(
+    true,
+    assets.image`secondmousesmall`,
+    0,
+    0
+    )
+    Keybinds.setSimulatorKeymap(
+    Keybinds.PlayerNumber.ONE,
+    Keybinds.CustomKey.W,
+    Keybinds.CustomKey.S,
+    Keybinds.CustomKey.A,
+    Keybinds.CustomKey.D,
+    Keybinds.CustomKey.LEFT_CLICK,
+    Keybinds.CustomKey.RIGHT_CLICK
+    )
+    Keybinds.setSimulatorKeymap(
+    Keybinds.PlayerNumber.TWO,
+    Keybinds.CustomKey.UP,
+    Keybinds.CustomKey.DOWN,
+    Keybinds.CustomKey.LEFT,
+    Keybinds.CustomKey.RIGHT,
+    Keybinds.CustomKey.Q,
+    Keybinds.CustomKey.E
+    )
     textSprite = textsprite.create("HELPLINE HAWAII", 0, 1)
     textSprite.setOutline(1, 15)
     textSprite.setIcon(assets.image`titlegun`)
@@ -58,12 +84,6 @@ function playersetup () {
     crowbar = sprites.create(assets.image`crowbar`, SpriteKind.droppeditem)
     bat = sprites.create(assets.image`enemy gun`, SpriteKind.droppeditem)
     scene.cameraFollowSprite(rotationalsprite)
-    Mouse.DrawMouse(
-    true,
-    assets.image`secondmousesmall`,
-    0,
-    0
-    )
     scene.setBackgroundImage(assets.image`a`)
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`starting area`)
@@ -71,24 +91,6 @@ function playersetup () {
     tiles.placeOnTile(bat, tiles.getTileLocation(21, 9))
     tiles.placeOnTile(crowbar, tiles.getTileLocation(21, 11))
     Mouse.Setsensibility(1.33334)
-    Keybinds.setSimulatorKeymap(
-    Keybinds.PlayerNumber.ONE,
-    Keybinds.CustomKey.W,
-    Keybinds.CustomKey.S,
-    Keybinds.CustomKey.A,
-    Keybinds.CustomKey.D,
-    Keybinds.CustomKey.LEFT_CLICK,
-    Keybinds.CustomKey.RIGHT_CLICK
-    )
-    Keybinds.setSimulatorKeymap(
-    Keybinds.PlayerNumber.TWO,
-    Keybinds.CustomKey.UP,
-    Keybinds.CustomKey.DOWN,
-    Keybinds.CustomKey.LEFT,
-    Keybinds.CustomKey.RIGHT,
-    Keybinds.CustomKey.Q,
-    Keybinds.CustomKey.E
-    )
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     let testenemy: Sprite = null
