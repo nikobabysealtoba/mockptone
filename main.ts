@@ -273,7 +273,7 @@ function intro_cutscene () {
         story.printCharacterText("I leave you with two questions.")
         story.printCharacterText("Firstly, Who is leaving the messages on your answering machine?")
         story.printCharacterText("Secondly, do you like hurting other people?")
-        scene.setBackgroundImage(assets.image`background`)
+        scene.setBackgroundImage(assets.image`phobetor colors`)
         timer.after(5000, function () {
             story.cancelCurrentCutscene()
             playersetup()
