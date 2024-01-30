@@ -70,6 +70,16 @@ function start_screen2 () {
     Keybinds.CustomKey.E
     )
 }
+function MapSelect () {
+    if (map_size == 3) {
+        tiles.setCurrentTilemap(tilemap`level18`)
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(61, 99))
+    } else if (map_size == 2) {
+    	
+    } else if (map_size == 1) {
+    	
+    }
+}
 function the_call () {
     controller.moveSprite(rotationalsprite, 0, 0)
     story.startCutscene(function () {
@@ -82,6 +92,7 @@ function the_call () {
             story.printCharacterText("The phone starts blaring. ", "conscience")
         } else {
             story.printCharacterText("The phone starts blaring anyway, your heart feels heavy.", "conscience")
+            info.changeLifeBy(-5)
         }
         message_roll = randint(1, 3)
         if (message_roll == 1) {
@@ -272,7 +283,8 @@ function intro_cutscene () {
         story.printCharacterText("I see that you remember me now, but you still don't know who I am.")
         story.printCharacterText("I leave you with two questions.")
         story.printCharacterText("Firstly, Who is leaving the messages on your answering machine?")
-        story.printCharacterText("Secondly, do you like hurting other people?")
+        story.printCharacterText("Secondly,")
+        story.printCharacterText("DO YOU LIKE HURTING OTHER PEOPLE?")
         scene.setBackgroundImage(assets.image`phobetor colors`)
         timer.after(5000, function () {
             story.cancelCurrentCutscene()
@@ -291,6 +303,7 @@ function playersetup () {
     rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
     rotationalsprite.setStayInScreen(true)
     controller.moveSprite(rotationalsprite, 150, 150)
+    info.setLife(6)
     crowbar = sprites.create(assets.image`crowbar`, SpriteKind.droppeditem)
     bat = sprites.create(assets.image`enemy gun`, SpriteKind.droppeditem)
     scene.cameraFollowSprite(rotationalsprite)
@@ -316,12 +329,13 @@ let rotationalsprite: Sprite = null
 let map_size = 0
 let normal_hp = false
 let INSIDEORNOT = false
-let originalimage: Image = null
 let angle = 0
+let originalimage: Image = null
 start_screen2()
 INSIDEORNOT = true
 normal_hp = true
 map_size = 0
+MapSelect()
 forever(function () {
     if (start_screen == true) {
         if (controller.A.isPressed() || (controller.right.isPressed() || (controller.down.isPressed() || controller.B.isPressed()) || (controller.up.isPressed() || controller.left.isPressed()))) {
