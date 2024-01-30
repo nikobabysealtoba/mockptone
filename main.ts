@@ -359,6 +359,10 @@ function playersetup () {
     tiles.placeOnTile(bat, tiles.getTileLocation(21, 9))
     tiles.placeOnTile(crowbar, tiles.getTileLocation(21, 11))
 }
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
+    tiles.setCurrentTilemap(tilemap`level2`)
+    tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(61, 99))
+})
 let mouseanimationcycle = 0
 let enemyswing = 0
 let bat: Sprite = null
