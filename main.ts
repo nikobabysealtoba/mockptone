@@ -5,7 +5,7 @@ namespace SpriteKind {
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
         tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
-        tiles.setTileAt(location, img`answered phone`)
+        tiles.setTileAt(location, assets.tile`transparency16`)
         the_call(game.ask("Pick up phone?"), randint(1, 3))
     }
 })
@@ -378,8 +378,8 @@ let itemheld = false
 let playerspawned = 0
 let start_screen = false
 let rotationalsprite: Sprite = null
-let originalimage: Image = null
 let angle = 0
+let originalimage: Image = null
 start_screen2()
 forever(function () {
     if (start_screen == true) {
