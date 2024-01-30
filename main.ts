@@ -1,10 +1,12 @@
 namespace SpriteKind {
     export const droppeditem = SpriteKind.create()
+    export const Archer = SpriteKind.create()
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
         tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
-        the_call()
+        tiles.setTileAt(location, img`answered phone`)
+        the_call(game.ask("Pick up phone?"), randint(1, 3))
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
@@ -70,21 +72,19 @@ function start_screen2 () {
     Keybinds.CustomKey.E
     )
 }
-function the_call () {
+function the_call (_1hpmode: boolean, messageroll: number) {
     controller.moveSprite(rotationalsprite, 0, 0)
     story.startCutscene(function () {
-        console.log("cutscene started")
-        story.printCharacterText("You have one new message!", "PHONE")
-        story.printCharacterText("Pick up phone?", "conscience")
-        story.showPlayerChoices("YES.", "NO.")
-        normal_hp = story.checkLastAnswer("YES.")
-        if (normal_hp == true) {
+        if (_1hpmode == true) {
+            info.setLife(5)
             story.printCharacterText("The phone starts blaring. ", "conscience")
         } else {
+            info.setLife(1)
             story.printCharacterText("The phone starts blaring anyway, your heart feels heavy.", "conscience")
         }
-        message_roll = randint(1, 3)
-        if (message_roll == 1) {
+        console.log("cutscene started")
+        story.printCharacterText("You have one new message!", "PHONE")
+        if (messageroll == 1) {
             story.printCharacterText("Hi! This is 'Dunvan' from O'Donald's Auto Parts.", "PHONE")
             story.printCharacterText("We have an order ready for you.", "PHONE")
             story.printCharacterText("What city would you like this picked up at?", "PHONE")
@@ -99,10 +99,10 @@ function the_call () {
                 map_size = randint(1, 3)
             }
             story.printCharacterText("Would you like to collect your package outside?", "PHONE")
-            story.showPlayerChoices("YES.", "NO.")
-            INSIDEORNOT = story.checkLastAnswer("YES.")
+            story.showPlayerChoices("NO.", "YES.")
+            INSIDEORNOT = story.checkLastAnswer("NO.")
             story.printCharacterText("Perfect, we're already there waiting for you at 104th street. Remember, be discreet!", "PHONE")
-        } else if (message_roll == 2) {
+        } else if (messageroll == 2) {
             story.printCharacterText("Hey! It's FloorCheck from the orphanage, we need a babysitter around here.", "PHONE")
             story.printCharacterText("We have a lot of ruffians needing some discipline, they say they'll let me pay you as if you were an employee. ", "PHONE")
             story.printCharacterText("How close are you from here? Better yet, just tell me your city.", "PHONE")
@@ -120,7 +120,7 @@ function the_call () {
             story.showPlayerChoices("NOT REALLY.", "FINE BY ME.")
             INSIDEORNOT = story.checkLastAnswer("NOT REALLY.")
             story.printCharacterText("Alright! We're waiting for you here at 81st street. Please be discreet around the adults.", "PHONE")
-        } else if (message_roll == 3) {
+        } else if (messageroll == 3) {
             story.printCharacterText("Sup, it's Raool from the club, we need you to be DJ tonight. Two events.", "PHONE")
             story.printCharacterText("You're free to play whatever you want.", "PHONE")
             story.printCharacterText("What city you coming from?", "PHONE")
@@ -136,11 +136,21 @@ function the_call () {
             }
             story.printCharacterText("Cool, we have an indoors rave and a concert out in the fresh air, choose.", "PHONE")
             story.showPlayerChoices("RAVE.", "CONCERT.")
-            INSIDEORNOT = story.checkLastAnswer("CONCERT.")
+            INSIDEORNOT = story.checkLastAnswer("RAVE.")
             story.printCharacterText("Sick, we're over at 24th street. Be discreet coming in, and dress to kill!", "PHONE")
         }
+        controller.moveSprite(rotationalsprite, 150, 150)
         console.log("cutscene ended ")
         story.cancelCurrentCutscene()
+        if (INSIDEORNOT == false) {
+            tiles.setCurrentTilemap(tilemap`level1`)
+            tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 47))
+            enemyspawnblocklist = tiles.getTilesByType(sprites.dungeon.collectibleInsignia)
+            enemyspawnblockamount = enemyspawnblocklist.length
+            for (let index = 0; index < enemyspawnblockamount; index++) {
+                spawn_enemy()
+            }
+        }
     })
 }
 function intro_cutscene () {
@@ -281,6 +291,53 @@ function intro_cutscene () {
         })
     })
 }
+function spawn_enemy () {
+    enemychance = randint(1, 3)
+    if (enemychance == 1 || enemychance == 2) {
+        Toba_Knight = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Enemy)
+        characterAnimations.setCharacterAnimationsEnabled(Toba_Knight, false)
+        tiles.placeOnTile(Toba_Knight, enemyspawnblocklist.pop())
+    }
+    if (enemychance == 3) {
+        Toba_Archer = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Archer)
+        characterAnimations.setCharacterAnimationsEnabled(Toba_Archer, false)
+        tiles.placeOnTile(Toba_Archer, enemyspawnblocklist.pop())
+    }
+}
 scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
     sprites.destroy(sprite)
 })
@@ -303,9 +360,16 @@ function playersetup () {
     tiles.placeOnTile(crowbar, tiles.getTileLocation(21, 11))
 }
 let mouseanimationcycle = 0
+let enemyswing = 0
 let bat: Sprite = null
 let crowbar: Sprite = null
-let message_roll = 0
+let Toba_Archer: Sprite = null
+let Toba_Knight: Sprite = null
+let enemychance = 0
+let enemyspawnblockamount = 0
+let enemyspawnblocklist: tiles.Location[] = []
+let INSIDEORNOT = false
+let map_size = 0
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
 let projectile: Sprite = null
@@ -314,22 +378,278 @@ let itemheld = false
 let playerspawned = 0
 let start_screen = false
 let rotationalsprite: Sprite = null
-let map_size = 0
-let normal_hp = false
-let INSIDEORNOT = false
 let originalimage: Image = null
 let angle = 0
 start_screen2()
-INSIDEORNOT = true
-normal_hp = true
-map_size = 0
 forever(function () {
     if (start_screen == true) {
         if (controller.A.isPressed() || (controller.right.isPressed() || (controller.down.isPressed() || controller.B.isPressed()) || (controller.up.isPressed() || controller.left.isPressed()))) {
             sprites.destroy(textSprite)
             sprites.destroy(textSprite2)
             start_screen = false
-            intro_cutscene()
+            playersetup()
+        }
+    }
+})
+forever(function () {
+    for (let value of sprites.allOfKind(SpriteKind.Archer)) {
+        characterAnimations.loopFrames(
+        value,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
+        200,
+        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
+        )
+        characterAnimations.loopFrames(
+        value,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
+        200,
+        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
+        )
+        characterAnimations.loopFrames(
+        value,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
+        70,
+        characterAnimations.rule(Predicate.MovingRight)
+        )
+        characterAnimations.loopFrames(
+        value,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
+        70,
+        characterAnimations.rule(Predicate.MovingLeft)
+        )
+    }
+})
+forever(function () {
+    for (let value2 of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (enemyswing == 1) {
+            characterAnimations.loopFrames(
+            value2,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            70,
+            characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
+            )
+            characterAnimations.loopFrames(
+            value2,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            70,
+            characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
+            )
+            timer.after(400, function () {
+                enemyswing = 0
+            })
+        } else {
+            characterAnimations.loopFrames(
+            value2,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            200,
+            characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
+            )
+            characterAnimations.loopFrames(
+            value2,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            200,
+            characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
+            )
+            characterAnimations.loopFrames(
+            value2,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            70,
+            characterAnimations.rule(Predicate.MovingRight)
+            )
+            characterAnimations.loopFrames(
+            value2,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            70,
+            characterAnimations.rule(Predicate.MovingLeft)
+            )
+        }
+    }
+})
+forever(function () {
+    for (let value3 of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (rotationalsprite.x > value3.x - 50 && rotationalsprite.x < value3.x + 50 && (rotationalsprite.y > value3.y - 50 && rotationalsprite.y < value3.y + 50)) {
+            value3.follow(rotationalsprite, 80)
+        } else {
+            value3.follow(rotationalsprite, 0)
+        }
+    }
+})
+forever(function () {
+    for (let value32 of sprites.allOfKind(SpriteKind.Archer)) {
+        if (rotationalsprite.x > value32.x - 50 && rotationalsprite.x < value32.x + 50 && (rotationalsprite.y > value32.y - 50 && rotationalsprite.y < value32.y + 50)) {
+            value32.follow(rotationalsprite, 20)
+        } else {
+            value32.follow(rotationalsprite, 0)
         }
     }
 })
