@@ -272,7 +272,8 @@ function intro_cutscene () {
         story.printCharacterText("I see that you remember me now, but you still don't know who I am.")
         story.printCharacterText("I leave you with two questions.")
         story.printCharacterText("Firstly, Who is leaving the messages on your answering machine?")
-        story.printCharacterText("Secondly, do you like hurting other people?")
+        story.printCharacterText("Secondly,")
+        story.printCharacterText("DO YOU LIKE HURTING OTHER PEOPLE?")
         scene.setBackgroundImage(assets.image`phobetor colors`)
         timer.after(5000, function () {
             story.cancelCurrentCutscene()
