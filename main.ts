@@ -317,8 +317,8 @@ let rotationalsprite: Sprite = null
 let map_size = 0
 let normal_hp = false
 let INSIDEORNOT = false
-let originalimage: Image = null
 let angle = 0
+let originalimage: Image = null
 start_screen2()
 INSIDEORNOT = true
 normal_hp = true
