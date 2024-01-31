@@ -148,8 +148,7 @@ function the_call (_1hpmode: boolean, messageroll: number) {
             enemyspawnblocklist = tiles.getTilesByType(sprites.swamp.swampTile3)
             enemyspawnblockamount = enemyspawnblocklist.length
             for (let index = 0; index < enemyspawnblockamount; index++) {
-                randomroll = randint(1, 5)
-                if (randomroll == 5) {
+                if (randint(1, 5) == 5) {
                     spawn_enemy()
                 }
             }
@@ -267,7 +266,6 @@ let crowbar: Sprite = null
 let Toba_SGunner: Sprite = null
 let Toba_Knight: Sprite = null
 let enemychance = 0
-let randomroll = 0
 let enemyspawnblockamount = 0
 let enemyspawnblocklist: tiles.Location[] = []
 let INSIDEORNOT = false
