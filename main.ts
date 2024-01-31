@@ -1,6 +1,6 @@
 namespace SpriteKind {
     export const droppeditem = SpriteKind.create()
-    export const Archer = SpriteKind.create()
+    export const SGunner = SpriteKind.create()
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
@@ -145,10 +145,13 @@ function the_call (_1hpmode: boolean, messageroll: number) {
         if (INSIDEORNOT == false) {
             tiles.setCurrentTilemap(tilemap`level1`)
             tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(7, 47))
-            enemyspawnblocklist = tiles.getTilesByType(sprites.dungeon.collectibleInsignia)
+            enemyspawnblocklist = tiles.getTilesByType(sprites.swamp.swampTile3)
             enemyspawnblockamount = enemyspawnblocklist.length
             for (let index = 0; index < enemyspawnblockamount; index++) {
-                spawn_enemy()
+                randomroll = randint(1, 5)
+                if (randomroll == 5) {
+                    spawn_enemy()
+                }
             }
         } else {
             if (map_size == 1) {
@@ -204,9 +207,9 @@ function spawn_enemy () {
         tiles.placeOnTile(Toba_Knight, enemyspawnblocklist.pop())
     }
     if (enemychance == 3) {
-        Toba_Archer = sprites.create(assets.image`toba enemy`, SpriteKind.Archer)
-        characterAnimations.setCharacterAnimationsEnabled(Toba_Archer, true)
-        tiles.placeOnTile(Toba_Archer, enemyspawnblocklist.pop())
+        Toba_SGunner = sprites.create(assets.image`toba enemy`, SpriteKind.SGunner)
+        characterAnimations.setCharacterAnimationsEnabled(Toba_SGunner, true)
+        tiles.placeOnTile(Toba_SGunner, enemyspawnblocklist.pop())
     }
 }
 scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
@@ -261,9 +264,10 @@ let mouseanimationcycle = 0
 let enemyswing = 0
 let bat: Sprite = null
 let crowbar: Sprite = null
-let Toba_Archer: Sprite = null
+let Toba_SGunner: Sprite = null
 let Toba_Knight: Sprite = null
 let enemychance = 0
+let randomroll = 0
 let enemyspawnblockamount = 0
 let enemyspawnblocklist: tiles.Location[] = []
 let INSIDEORNOT = false
@@ -327,7 +331,7 @@ forever(function () {
 })
 forever(function () {
     for (let value3 of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (rotationalsprite.x > value3.x - 40 && rotationalsprite.x < value3.x + 40 && (rotationalsprite.y > value3.y - 40 && rotationalsprite.y < value3.y + 40)) {
+        if (rotationalsprite.x > value3.x - 60 && rotationalsprite.x < value3.x + 60 && (rotationalsprite.y > value3.y - 60 && rotationalsprite.y < value3.y + 60)) {
             value3.follow(rotationalsprite, 100)
         } else {
             value3.follow(rotationalsprite, 0)
@@ -335,7 +339,7 @@ forever(function () {
     }
 })
 forever(function () {
-    for (let value32 of sprites.allOfKind(SpriteKind.Archer)) {
+    for (let value32 of sprites.allOfKind(SpriteKind.SGunner)) {
         if (rotationalsprite.x > value32.x - 50 && rotationalsprite.x < value32.x + 50 && (rotationalsprite.y > value32.y - 50 && rotationalsprite.y < value32.y + 50)) {
             value32.follow(rotationalsprite, 80)
         } else {
@@ -373,7 +377,7 @@ forever(function () {
     }
 })
 forever(function () {
-    for (let value of sprites.allOfKind(SpriteKind.Archer)) {
+    for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
         characterAnimations.loopFrames(
         value,
         assets.animation`Toba Gunner FR Idle`,
