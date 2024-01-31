@@ -5,7 +5,7 @@ namespace SpriteKind {
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
         tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
-        tiles.setTileAt(location, assets.tile`transparency16`)
+        tiles.setTileAt(location, assets.tile`myTile3`)
         the_call(game.ask("Pick up phone?"), randint(1, 3))
     }
 })
@@ -149,6 +149,32 @@ function the_call (_1hpmode: boolean, messageroll: number) {
             enemyspawnblockamount = enemyspawnblocklist.length
             for (let index = 0; index < enemyspawnblockamount; index++) {
                 spawn_enemy()
+            }
+        } else {
+            if (map_size == 1) {
+                tiles.setCurrentTilemap(tilemap`level2`)
+                tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(61, 99))
+                enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+                enemyspawnblockamount = enemyspawnblocklist.length
+                for (let index = 0; index < enemyspawnblockamount; index++) {
+                    spawn_enemy()
+                }
+            } else if (map_size == 2) {
+                tiles.setCurrentTilemap(tilemap`level0`)
+                tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(40, 99))
+                enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+                enemyspawnblockamount = enemyspawnblocklist.length
+                for (let index = 0; index < enemyspawnblockamount; index++) {
+                    spawn_enemy()
+                }
+            } else if (map_size == 3) {
+                tiles.setCurrentTilemap(tilemap`levelrahhh`)
+                tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(64, 0))
+                enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+                enemyspawnblockamount = enemyspawnblocklist.length
+                for (let index = 0; index < enemyspawnblockamount; index++) {
+                    spawn_enemy()
+                }
             }
         }
     })
@@ -360,8 +386,31 @@ function playersetup () {
     tiles.placeOnTile(crowbar, tiles.getTileLocation(21, 11))
 }
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
-    tiles.setCurrentTilemap(tilemap`level2`)
-    tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(61, 99))
+    if (map_size == 1) {
+        tiles.setCurrentTilemap(tilemap`level2`)
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(61, 99))
+        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+        enemyspawnblockamount = enemyspawnblocklist.length
+        for (let index = 0; index < enemyspawnblockamount; index++) {
+            spawn_enemy()
+        }
+    } else if (map_size == 2) {
+        tiles.setCurrentTilemap(tilemap`level0`)
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(40, 99))
+        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+        enemyspawnblockamount = enemyspawnblocklist.length
+        for (let index = 0; index < enemyspawnblockamount; index++) {
+            spawn_enemy()
+        }
+    } else if (map_size == 3) {
+        tiles.setCurrentTilemap(tilemap`levelrahhh`)
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(64, 0))
+        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+        enemyspawnblockamount = enemyspawnblocklist.length
+        for (let index = 0; index < enemyspawnblockamount; index++) {
+            spawn_enemy()
+        }
+    }
 })
 let mouseanimationcycle = 0
 let enemyswing = 0
