@@ -541,16 +541,12 @@ game.onUpdateInterval(650, function () {
             targetlocked = 1
             if (targetlocked == 1) {
                 value4.follow(rotationalsprite, 0)
-                value4.setKind(SpriteKind.enemyidle)
                 targetlocked = 0
                 bullet2 = darts.create(assets.image`myImage1`, SpriteKind.bullet)
                 tiles.placeOnTile(bullet2, value4.tilemapLocation())
                 bullet2.pow = 150
                 bullet2.angle += spriteutils.radiansToDegrees(spriteutils.angleFrom(value4, rotationalsprite)) * -1 + randint(-10, 10)
                 bullet2.throwDart()
-                timer.after(400, function () {
-                    value4.setKind(SpriteKind.SGunner)
-                })
             }
         }
     }
