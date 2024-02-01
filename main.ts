@@ -1,33 +1,17 @@
 namespace SpriteKind {
     export const droppeditem = SpriteKind.create()
     export const SGunner = SpriteKind.create()
+    export const enemyidle = SpriteKind.create()
+    export const bullet = SpriteKind.create()
+    export const player2 = SpriteKind.create()
+    export const Killa = SpriteKind.create()
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
-    if (controller.player2.isPressed(ControllerButton.B)) {
-        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
-        tiles.setTileAt(location, assets.tile`myTile3`)
-        the_call(game.ask("Pick up phone?"), randint(1, 3))
-    }
+sprites.onOverlap(SpriteKind.player2, SpriteKind.bullet, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
+    info.changeLifeBy(-1)
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.droppeditem, function (sprite, otherSprite) {
-    if (start_screen == false && playerspawned == 0 && controller.B.isPressed()) {
-        timer.after(10, function () {
-            if (start_screen == false && playerspawned == 0 && controller.B.isPressed()) {
-                itemheld = true
-                helditemsprite = otherSprite.image
-                sprites.destroy(otherSprite)
-            }
-        })
-    }
-})
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (itemheld == true) {
-        itemheld = false
-        projectile = sprites.createProjectileFromSprite(helditemsprite, rotationalsprite, 50, 50)
-        spriteutils.setVelocityAtAngle(projectile, spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite()), 300)
-    } else {
-    	
-    }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.bullet, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
 })
 function spriterotate () {
     angle = spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite())
@@ -72,6 +56,50 @@ function start_screen2 () {
     Keybinds.CustomKey.E
     )
 }
+sprites.onOverlap(SpriteKind.player2, SpriteKind.Enemy, function (sprite, otherSprite) {
+    let attacking = 0
+    if (attacking == 1) {
+        info.changeScoreBy(1)
+        sprites.destroy(otherSprite)
+    } else {
+        otherSprite.follow(rotationalsprite, 0)
+        enemyswing = 0
+        info.changeLifeBy(-1)
+        otherSprite.setKind(SpriteKind.enemyidle)
+        timer.after(400, function () {
+            otherSprite.setKind(SpriteKind.Enemy)
+        })
+        if (info.life() <= 0) {
+            game.gameOver(false)
+        }
+    }
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killa, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
+    sprites.destroy(sprite)
+})
+scene.onOverlapTile(SpriteKind.player2, assets.tile`meddybeddy`, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`basepurpletile`)
+    info.changeLifeBy(1)
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (itemheld == true) {
+        itemheld = false
+        projectile = sprites.createProjectileFromSprite(helditemsprite, rotationalsprite, 50, 50)
+        spriteutils.setVelocityAtAngle(projectile, spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite()), 300)
+    }
+})
+sprites.onDestroyed(SpriteKind.Killa, function (sprite) {
+    droppeditemlist = [
+    assets.image`titlegun`,
+    assets.image`enemy gun`,
+    assets.image`crowbar`,
+    assets.image`knife`,
+    assets.image`sword`
+    ]
+    droppeditemsprite = sprites.create(droppeditemlist[randint(0, droppeditemlist.length - 1)], SpriteKind.droppeditem)
+    tiles.placeOnTile(droppeditemsprite, sprite.tilemapLocation())
+})
 function the_call (_1hpmode: boolean, messageroll: number) {
     controller.moveSprite(rotationalsprite, 0, 0)
     story.startCutscene(function () {
@@ -181,6 +209,34 @@ function the_call (_1hpmode: boolean, messageroll: number) {
         }
     })
 }
+scene.onHitWall(SpriteKind.bullet, function (sprite, location) {
+    sprites.destroy(sprite)
+})
+sprites.onOverlap(SpriteKind.player2, SpriteKind.droppeditem, function (sprite, otherSprite) {
+    if (start_screen == false && playerspawned == 0 && controller.B.isPressed()) {
+        timer.after(10, function () {
+            if (start_screen == false && playerspawned == 0 && controller.B.isPressed()) {
+                itemheld = true
+                helditemsprite = otherSprite.image
+                sprites.destroy(otherSprite)
+            }
+        })
+    }
+})
+sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
+    droppeditemlist = [
+    assets.image`titlegun`,
+    assets.image`enemy gun`,
+    assets.image`crowbar`,
+    assets.image`knife`,
+    assets.image`sword`
+    ]
+    droppeditemsprite = sprites.create(droppeditemlist[randint(0, droppeditemlist.length - 1)], SpriteKind.droppeditem)
+    tiles.placeOnTile(droppeditemsprite, sprite.tilemapLocation())
+})
+scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
+    sprites.destroy(sprite)
+})
 function intro_cutscene () {
     scene.setBackgroundImage(assets.image`aa`)
     story.startCutscene(function () {
@@ -198,20 +254,46 @@ function intro_cutscene () {
         })
     })
 }
+sprites.onDestroyed(SpriteKind.SGunner, function (sprite) {
+    droppeditemlist = [
+    assets.image`titlegun`,
+    assets.image`enemy gun`,
+    assets.image`crowbar`,
+    assets.image`knife`,
+    assets.image`sword`
+    ]
+    droppeditemsprite = sprites.create(droppeditemlist[randint(0, droppeditemlist.length - 1)], SpriteKind.droppeditem)
+    tiles.placeOnTile(droppeditemsprite, sprite.tilemapLocation())
+})
 function spawn_enemy () {
-    enemychance = randint(1, 3)
+    enemychance = randint(1, 5)
     if (enemychance == 1 || enemychance == 2) {
         Toba_Knight = sprites.create(assets.image`toba enemy`, SpriteKind.Enemy)
         characterAnimations.setCharacterAnimationsEnabled(Toba_Knight, true)
         tiles.placeOnTile(Toba_Knight, enemyspawnblocklist.pop())
     }
-    if (enemychance == 3) {
+    if (enemychance == 3 || enemychance == 4) {
         Toba_SGunner = sprites.create(assets.image`toba enemy`, SpriteKind.SGunner)
+        targetlocked = 0
         characterAnimations.setCharacterAnimationsEnabled(Toba_SGunner, true)
         tiles.placeOnTile(Toba_SGunner, enemyspawnblocklist.pop())
     }
+    if (enemychance == 5) {
+        Toba_Killa = sprites.create(assets.image`toba enemy`, SpriteKind.Killa)
+        targetlocked = 0
+        characterAnimations.setCharacterAnimationsEnabled(Toba_Killa, true)
+        tiles.placeOnTile(Toba_Killa, enemyspawnblocklist.pop())
+    }
 }
-scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
+scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile0`, function (sprite, location) {
+    if (controller.player2.isPressed(ControllerButton.B)) {
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
+        tiles.setTileAt(location, assets.tile`myTile3`)
+        the_call(game.ask("Pick up phone?"), randint(1, 3))
+    }
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.SGunner, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
     sprites.destroy(sprite)
 })
 function playersetup () {
@@ -219,19 +301,19 @@ function playersetup () {
     angle = 0
     originalimage = assets.image`myImage`
     itemheld = false
-    rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
+    rotationalsprite = sprites.create(assets.image`myImage`, SpriteKind.player2)
     rotationalsprite.setStayInScreen(true)
     controller.moveSprite(rotationalsprite, 150, 150)
-    crowbar = sprites.create(assets.image`crowbar`, SpriteKind.droppeditem)
-    bat = sprites.create(assets.image`enemy gun`, SpriteKind.droppeditem)
     scene.cameraFollowSprite(rotationalsprite)
     scene.setBackgroundImage(assets.image`a`)
     scene.setBackgroundColor(7)
     tiles.setCurrentTilemap(tilemap`starting area`)
     tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(15, 30))
-    tiles.placeOnTile(bat, tiles.getTileLocation(21, 9))
-    tiles.placeOnTile(crowbar, tiles.getTileLocation(21, 11))
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
+    sprites.destroy(sprite)
+})
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
     if (map_size == 1) {
         tiles.setCurrentTilemap(tilemap`level2`)
@@ -260,9 +342,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
     }
 })
 let mouseanimationcycle = 0
-let enemyswing = 0
-let bat: Sprite = null
-let crowbar: Sprite = null
+let bullet: Dart = null
+let Toba_Killa: Sprite = null
+let targetlocked = 0
 let Toba_SGunner: Sprite = null
 let Toba_Knight: Sprite = null
 let enemychance = 0
@@ -270,17 +352,131 @@ let enemyspawnblockamount = 0
 let enemyspawnblocklist: tiles.Location[] = []
 let INSIDEORNOT = false
 let map_size = 0
+let droppeditemsprite: Sprite = null
+let droppeditemlist: Image[] = []
+let helditemsprite: Image = null
+let projectile: Sprite = null
+let itemheld = false
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
-let projectile: Sprite = null
-let helditemsprite: Image = null
-let itemheld = false
 let playerspawned = 0
 let start_screen = false
 let rotationalsprite: Sprite = null
+let enemyswing = 0
 let originalimage: Image = null
 let angle = 0
 start_screen2()
+enemyswing = 0
+forever(function () {
+    for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Gunner FR Idle`,
+        200,
+        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
+        )
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Gunner FL Idle`,
+        200,
+        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
+        )
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Gunner FR Walk`,
+        70,
+        characterAnimations.rule(Predicate.MovingRight)
+        )
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Gunner FL Walk`,
+        70,
+        characterAnimations.rule(Predicate.MovingLeft)
+        )
+    }
+})
+forever(function () {
+    for (let value of sprites.allOfKind(SpriteKind.Killa)) {
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Killa FR Idle`,
+        200,
+        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
+        )
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Killa FL Idle`,
+        200,
+        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
+        )
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Gunner FR Walk0`,
+        70,
+        characterAnimations.rule(Predicate.MovingRight)
+        )
+        characterAnimations.loopFrames(
+        value,
+        assets.animation`Toba Gunner FR Walk1`,
+        70,
+        characterAnimations.rule(Predicate.MovingLeft)
+        )
+    }
+})
+forever(function () {
+    for (let value32 of sprites.allOfKind(SpriteKind.SGunner)) {
+        if (rotationalsprite.x > value32.x - 50 && rotationalsprite.x < value32.x + 50 && (rotationalsprite.y > value32.y - 50 && rotationalsprite.y < value32.y + 50)) {
+            value32.follow(rotationalsprite, 80)
+        } else {
+            value32.follow(rotationalsprite, 0)
+        }
+    }
+})
+game.onUpdateInterval(150, function () {
+    for (let value of sprites.allOfKind(SpriteKind.Killa)) {
+        if (rotationalsprite.x > value.x - 80 && rotationalsprite.x < value.x + 80 && (rotationalsprite.y > value.y - 80 && rotationalsprite.y < value.y + 80)) {
+            targetlocked = 1
+            if (targetlocked == 1) {
+                targetlocked = 0
+                bullet = darts.create(assets.image`myImage1`, SpriteKind.bullet)
+                tiles.placeOnTile(bullet, value.tilemapLocation())
+                bullet.pow = 200
+                bullet.angle += spriteutils.radiansToDegrees(spriteutils.angleFrom(value, rotationalsprite)) * -1 + randint(-20, 20)
+                bullet.throwDart()
+            }
+        }
+    }
+})
+forever(function () {
+    if (start_screen == true) {
+        if (controller.A.isPressed() || (controller.right.isPressed() || (controller.down.isPressed() || controller.B.isPressed()) || (controller.up.isPressed() || controller.left.isPressed()))) {
+            sprites.destroy(textSprite)
+            sprites.destroy(textSprite2)
+            start_screen = false
+            playersetup()
+        }
+    }
+})
+game.onUpdateInterval(650, function () {
+    for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
+        if (rotationalsprite.x > value.x - 100 && rotationalsprite.x < value.x + 100 && (rotationalsprite.y > value.y - 100 && rotationalsprite.y < value.y + 100)) {
+            targetlocked = 1
+            if (targetlocked == 1) {
+                value.follow(rotationalsprite, 0)
+                value.setKind(SpriteKind.enemyidle)
+                targetlocked = 0
+                bullet = darts.create(assets.image`myImage1`, SpriteKind.bullet)
+                tiles.placeOnTile(bullet, value.tilemapLocation())
+                bullet.pow = 150
+                bullet.angle += spriteutils.radiansToDegrees(spriteutils.angleFrom(value, rotationalsprite)) * -1 + randint(-10, 10)
+                bullet.throwDart()
+                timer.after(400, function () {
+                    value.setKind(SpriteKind.SGunner)
+                })
+            }
+        }
+    }
+})
 forever(function () {
     for (let value2 of sprites.allOfKind(SpriteKind.Enemy)) {
         if (enemyswing == 1) {
@@ -337,11 +533,11 @@ forever(function () {
     }
 })
 forever(function () {
-    for (let value32 of sprites.allOfKind(SpriteKind.SGunner)) {
-        if (rotationalsprite.x > value32.x - 50 && rotationalsprite.x < value32.x + 50 && (rotationalsprite.y > value32.y - 50 && rotationalsprite.y < value32.y + 50)) {
-            value32.follow(rotationalsprite, 80)
+    for (let value3 of sprites.allOfKind(SpriteKind.Killa)) {
+        if (rotationalsprite.x > value3.x - 80 && rotationalsprite.x < value3.x + 80 && (rotationalsprite.y > value3.y - 80 && rotationalsprite.y < value3.y + 80)) {
+            value3.follow(rotationalsprite, 60)
         } else {
-            value32.follow(rotationalsprite, 0)
+            value3.follow(rotationalsprite, 0)
         }
     }
 })
@@ -355,50 +551,12 @@ forever(function () {
         if (mouseanimationcycle == 0) {
             mouseanimationcycle = 1
             timer.after(500, function () {
-                Mouse.mouseSprite().setImage(assets.image`mousesmall`)
+                Mouse.mouseSprite().setImage(assets.image`secondmousesmall`)
             })
             timer.after(1000, function () {
                 Mouse.mouseSprite().setImage(assets.image`mouselarge`)
                 mouseanimationcycle = 0
             })
         }
-    }
-})
-forever(function () {
-    if (start_screen == true) {
-        if (controller.A.isPressed() || (controller.right.isPressed() || (controller.down.isPressed() || controller.B.isPressed()) || (controller.up.isPressed() || controller.left.isPressed()))) {
-            sprites.destroy(textSprite)
-            sprites.destroy(textSprite2)
-            start_screen = false
-            playersetup()
-        }
-    }
-})
-forever(function () {
-    for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
-        characterAnimations.loopFrames(
-        value,
-        assets.animation`Toba Gunner FR Idle`,
-        200,
-        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
-        )
-        characterAnimations.loopFrames(
-        value,
-        assets.animation`Toba Gunner FL Idle`,
-        200,
-        characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
-        )
-        characterAnimations.loopFrames(
-        value,
-        assets.animation`Toba Gunner FR Walk`,
-        70,
-        characterAnimations.rule(Predicate.MovingRight)
-        )
-        characterAnimations.loopFrames(
-        value,
-        assets.animation`Toba Gunner FL Walk`,
-        70,
-        characterAnimations.rule(Predicate.MovingLeft)
-        )
     }
 })

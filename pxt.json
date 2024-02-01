@@ -1,5 +1,5 @@
 {
-    "name": "mockptone enemies  #2",
+    "name": "mockptone enemies  #3",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -26,7 +26,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.12.46",
+        "target": "1.12.47",
         "targetId": "arcade"
     },
     "supportedTargets": [
