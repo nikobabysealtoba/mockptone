@@ -82,8 +82,10 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killa, function (sprite, oth
     sprites.destroy(sprite)
 })
 scene.onOverlapTile(SpriteKind.player2, assets.tile`meddybeddy`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`basepurpletile`)
-    info.changeLifeBy(1)
+    if (canheal) {
+        tiles.setTileAt(location, assets.tile`basepurpletile`)
+        info.changeLifeBy(1)
+    }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (itemheld == true) {
@@ -126,9 +128,11 @@ function the_call (_1hpmode: boolean, messageroll: number) {
     controller.moveSprite(legs, 0, 0)
     story.startCutscene(function () {
         if (_1hpmode == true) {
+            canheal = true
             info.setLife(5)
             story.printCharacterText("The phone starts blaring. ", "conscience")
         } else {
+            canheal = false
             info.setLife(1)
             story.printCharacterText("The phone starts blaring anyway, your heart feels heavy.", "conscience")
         }
@@ -436,6 +440,7 @@ let arms: Sprite = null
 let helditemsprite: Image = null
 let projectile: Sprite = null
 let itemheld = false
+let canheal = false
 let textSprite2: TextSprite = null
 let textSprite: TextSprite = null
 let start_screen = false
