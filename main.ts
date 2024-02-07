@@ -5,7 +5,31 @@ namespace SpriteKind {
     export const bullet = SpriteKind.create()
     export const player2 = SpriteKind.create()
     export const Killa = SpriteKind.create()
+    export const babyseal = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.player2, SpriteKind.babyseal, function (sprite, otherSprite) {
+    sprites.destroyAllSpritesOfKind(SpriteKind.player2)
+    sprites.destroyAllSpritesOfKind(SpriteKind.droppeditem)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Killa)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+    sprites.destroyAllSpritesOfKind(SpriteKind.SGunner)
+    sprites.destroyAllSpritesOfKind(SpriteKind.babyseal)
+    scene.setBackgroundColor(15)
+    tiles.setCurrentTilemap(tilemap`level55`)
+    scene.setBackgroundImage(assets.image`round`)
+    game.splash("hello seal")
+    timer.after(5000, function () {
+        scene.setBackgroundImage(assets.image`facepalm`)
+    })
+    timer.after(10000, function () {
+        game.splash("i judge u...")
+        scene.setBackgroundImage(assets.image`niko seal`)
+    })
+    timer.after(15000, function () {
+        game.setGameOverMessage(true, "u found niko baby seal")
+        game.gameOver(true)
+    })
+})
 sprites.onOverlap(SpriteKind.player2, SpriteKind.bullet, function (sprite, otherSprite) {
     if (swinging == 1) {
         sprites.destroy(otherSprite)
@@ -105,6 +129,7 @@ scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile11`, function (sprite,
         tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
         controller.moveSprite(legs, 0, 0)
         _1hpmodecomplete = false
+        _1hp_cutscene()
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -115,6 +140,28 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.rule(Predicate.MovingRight)
     )
 })
+function _1hp_cutscene () {
+    sprites.destroyAllSpritesOfKind(SpriteKind.player2)
+    cutscenecomplete = false
+    scene.setBackgroundColor(15)
+    tiles.setCurrentTilemap(tilemap`level55`)
+    scene.setBackgroundImage(assets.image`aa`)
+    story.startCutscene(function () {
+        story.printCharacterText("Oh It's you again. Looks like you've been busy since the last time we met.")
+        story.printCharacterText("WHY DID YOU COME BACK HERE? YOU'RE NOT A NICE PERSON, ARE YOU? YOU MAKE ME SICK!")
+        story.printCharacterText("I see that you remember me now, but you still don't know who I am.")
+        story.printCharacterText("I leave you with two questions.")
+        story.printCharacterText("Firstly, Who is leaving the messages on your answering machine?")
+        story.printCharacterText("Secondly,")
+        story.printCharacterText("DO YOU LIKE HURTING OTHER PEOPLE?")
+        scene.setBackgroundImage(assets.image`phobetor colors`)
+        timer.after(5000, function () {
+            story.cancelCurrentCutscene()
+            cutscenecomplete = true
+            playersetup()
+        })
+    })
+}
 sprites.onOverlap(SpriteKind.player2, SpriteKind.SGunner, function (sprite, otherSprite) {
     if (swinging == 1) {
         sprites.destroy(otherSprite)
@@ -147,7 +194,6 @@ function the_call (_1hpmode: boolean, messageroll: number) {
             info.setLife(1)
             story.printCharacterText("The phone starts blaring anyway, your heart feels heavy.", "conscience")
         }
-        console.log("cutscene started")
         story.printCharacterText("You have one new message!", "PHONE")
         if (messageroll == 1) {
             story.printCharacterText("Hi! This is 'Dunvan' from O'Donald's Auto Parts.", "PHONE")
@@ -169,7 +215,7 @@ function the_call (_1hpmode: boolean, messageroll: number) {
             story.printCharacterText("Perfect, we're already there waiting for you at 104th street. Remember, be discreet!", "PHONE")
         } else if (messageroll == 2) {
             story.printCharacterText("Hey! It's FloorCheck from the orphanage, we need a babysitter around here.", "PHONE")
-            story.printCharacterText("We have a lot of ruffians needing some discipline, they say they'll let me pay you as if you were an employee. ", "PHONE")
+            story.printCharacterText("We have a lot of ruffians needing some discipline.", "PHONE")
             story.printCharacterText("How close are you from here? Better yet, just tell me your city.", "PHONE")
             story.showPlayerChoices("HONOLULU.", "HILO.", "HULUALOA.", "I CAN BE ANYWHERE.")
             if (story.getLastAnswer() == "HONOLULU.") {
@@ -205,7 +251,6 @@ function the_call (_1hpmode: boolean, messageroll: number) {
             story.printCharacterText("Sick, we're over at 24th street. Be discreet coming in, and dress to kill!", "PHONE")
         }
         controller.moveSprite(legs, 200, 200)
-        console.log("cutscene ended ")
         story.cancelCurrentCutscene()
         if (INSIDEORNOT == false) {
             tiles.setCurrentTilemap(tilemap`level1`)
@@ -300,24 +345,6 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
 scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
     sprites.destroy(sprite)
 })
-function intro_cutscene () {
-    tiles.setCurrentTilemap(tilemap`level55`)
-    scene.setBackgroundImage(assets.image`aa`)
-    story.startCutscene(function () {
-        story.printCharacterText("Oh It's you again. Looks like you've been busy since the last time we met.")
-        story.printCharacterText("WHY DID YOU COME BACK HERE? YOU'RE NOT A NICE PERSON, ARE YOU? YOU MAKE ME SICK!")
-        story.printCharacterText("I see that you remember me now, but you still don't know who I am.")
-        story.printCharacterText("I leave you with two questions.")
-        story.printCharacterText("Firstly, Who is leaving the messages on your answering machine?")
-        story.printCharacterText("Secondly,")
-        story.printCharacterText("DO YOU LIKE HURTING OTHER PEOPLE?")
-        scene.setBackgroundImage(assets.image`phobetor colors`)
-        timer.after(5000, function () {
-            story.cancelCurrentCutscene()
-            playersetup()
-        })
-    })
-}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (swinging == 0 && playerspawned == 0) {
         swinging = 1
@@ -391,7 +418,6 @@ function playersetup () {
     respawncooldown = 0
     playerspawned = 0
     angle = 0
-    info.setScore(0)
     currentarmframe = assets.image`arms`
     originalimage = assets.image`Phobetor`
     itemheld = false
@@ -409,12 +435,28 @@ function playersetup () {
     scene.setBackgroundColor(7)
     if (_1hpmodecomplete) {
         tiles.setCurrentTilemap(tilemap`starting area`)
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(15, 30))
+        tiles.placeOnTile(legs, tiles.getTileLocation(15, 30))
+        tiles.placeOnTile(arms, tiles.getTileLocation(15, 30))
+    } else if (cutscenecomplete) {
+        tiles.setCurrentTilemap(tilemap`finalarea`)
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(21, 16))
+        tiles.placeOnTile(legs, tiles.getTileLocation(21, 16))
+        tiles.placeOnTile(arms, tiles.getTileLocation(21, 16))
+        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+        enemyspawnblockamount = enemyspawnblocklist.length
+        him = sprites.create(assets.image`seal`, SpriteKind.babyseal)
+        tiles.placeOnTile(him, tiles.getTileLocation(148, 14))
+        for (let index = 0; index < enemyspawnblockamount; index++) {
+            spawn_enemy()
+        }
+        info.setLife(25)
     } else {
-        tiles.setCurrentTilemap(tilemap`starting area`)
+        tiles.setCurrentTilemap(tilemap`starting area0`)
+        tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(15, 30))
+        tiles.placeOnTile(legs, tiles.getTileLocation(15, 30))
+        tiles.placeOnTile(arms, tiles.getTileLocation(15, 30))
     }
-    tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(15, 30))
-    tiles.placeOnTile(legs, tiles.getTileLocation(15, 30))
-    tiles.placeOnTile(arms, tiles.getTileLocation(15, 30))
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
@@ -457,6 +499,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (
 })
 let mouseanimationcycle = 0
 let bullet2: Dart = null
+let him: Sprite = null
 let respawncooldown = 0
 let Toba_Killa: Sprite = null
 let targetlocked = 0
@@ -471,6 +514,7 @@ let enemyamount = 0
 let map_spawned = false
 let droppeditemsprite: Sprite = null
 let droppeditemlist: Image[] = []
+let cutscenecomplete = false
 let _1hpmodecomplete = false
 let legs: Sprite = null
 let arms: Sprite = null
@@ -557,6 +601,7 @@ forever(function () {
             _1hpmodecomplete = true
         }
         timer.after(10000, function () {
+            sprites.destroyAllSpritesOfKind(SpriteKind.droppeditem)
             playersetup()
         })
     }
