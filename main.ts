@@ -450,12 +450,21 @@ function playersetup () {
         for (let index = 0; index < enemyspawnblockamount; index++) {
             spawn_enemy()
         }
-        info.setLife(25)
+        info.setLife(40)
     } else {
         tiles.setCurrentTilemap(tilemap`starting area0`)
         tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(15, 30))
         tiles.placeOnTile(legs, tiles.getTileLocation(15, 30))
         tiles.placeOnTile(arms, tiles.getTileLocation(15, 30))
+        if (tutorial) {
+            timer.after(500, function () {
+                game.splash("Press M1 for A button", "Press M2 for B")
+                game.splash("Press E to interact", "E is only used for phones")
+                game.splash("M1 is a sword swing")
+                game.splash("M2 picks up a dropped item", "another M2 throws item")
+                tutorial = false
+            })
+        }
     }
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -527,6 +536,7 @@ let textSprite: TextSprite = null
 let start_screen = false
 let angle = 0
 let swinging = 0
+let tutorial = false
 let playerspawned = 0
 let enemyswing = 0
 let rotationalsprite: Sprite = null
@@ -535,6 +545,7 @@ let currentarmframe: Image = null
 start_screen2()
 enemyswing = 0
 playerspawned = 1
+tutorial = true
 forever(function () {
     for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
         characterAnimations.loopFrames(
