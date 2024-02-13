@@ -31,7 +31,8 @@ sprites.onOverlap(SpriteKind.player2, SpriteKind.babyseal, function (sprite, oth
     })
 })
 controller.player3.onButtonEvent(ControllerButton.Up, ControllerButtonEvent.Pressed, function () {
-    if (playerspawned == 0 && !(map_spawned)) {
+    if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
+        oncall = false
         notplaying1hpmode = true
         info.setLife(5)
         tiles.setCurrentTilemap(tilemap`level2`)
@@ -125,7 +126,8 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killa, function (sprite, oth
     sprites.destroy(sprite)
 })
 controller.player3.onButtonEvent(ControllerButton.Down, ControllerButtonEvent.Pressed, function () {
-    if (playerspawned == 0 && !(map_spawned)) {
+    if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
+        oncall = false
         notplaying1hpmode = true
         info.setLife(5)
         tiles.setCurrentTilemap(tilemap`level0`)
@@ -164,7 +166,8 @@ function spriterotate2 () {
     arms.setImage(scaling.rot(currentarmframe.clone(), spriteutils.radiansToDegrees(spriteutils.angleFrom(rotationalsprite, Mouse.mouseSprite()))))
 }
 controller.player3.onButtonEvent(ControllerButton.B, ControllerButtonEvent.Pressed, function () {
-    if (playerspawned == 0 && !(map_spawned)) {
+    if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
+        oncall = false
         notplaying1hpmode = false
         info.setLife(1)
         tiles.setCurrentTilemap(tilemap`levelrahhh`)
@@ -179,7 +182,8 @@ controller.player3.onButtonEvent(ControllerButton.B, ControllerButtonEvent.Press
     }
 })
 controller.player3.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
-    if (playerspawned == 0 && !(map_spawned)) {
+    if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
+        oncall = false
         notplaying1hpmode = false
         info.setLife(1)
         tiles.setCurrentTilemap(tilemap`level0`)
@@ -254,7 +258,8 @@ sprites.onDestroyed(SpriteKind.Killa, function (sprite) {
     }
 })
 controller.player3.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.Pressed, function () {
-    if (playerspawned == 0 && !(map_spawned)) {
+    if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
+        oncall = false
         notplaying1hpmode = false
         info.setLife(1)
         tiles.setCurrentTilemap(tilemap`level2`)
@@ -269,7 +274,8 @@ controller.player3.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.P
     }
 })
 controller.player3.onButtonEvent(ControllerButton.Left, ControllerButtonEvent.Pressed, function () {
-    if (playerspawned == 0 && !(map_spawned)) {
+    if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
+        oncall = false
         notplaying1hpmode = true
         info.setLife(5)
         tiles.setCurrentTilemap(tilemap`levelrahhh`)
@@ -354,6 +360,7 @@ function the_call (_1hpmode: boolean, messageroll: number) {
         controller.moveSprite(legs, 200, 200)
         story.cancelCurrentCutscene()
         if (INSIDEORNOT == false) {
+            oncall = false
             tiles.setCurrentTilemap(tilemap`level1`)
             tiles.placeOnTile(legs, tiles.getTileLocation(7, 47))
             enemyspawnblocklist = tiles.getTilesByType(sprites.swamp.swampTile3)
@@ -365,6 +372,7 @@ function the_call (_1hpmode: boolean, messageroll: number) {
             }
         } else {
             if (map_size == 1) {
+                oncall = false
                 tiles.setCurrentTilemap(tilemap`level2`)
                 tiles.placeOnTile(legs, tiles.getTileLocation(61, 99))
                 enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
@@ -375,6 +383,7 @@ function the_call (_1hpmode: boolean, messageroll: number) {
                 }
                 map_spawned = true
             } else if (map_size == 2) {
+                oncall = false
                 tiles.setCurrentTilemap(tilemap`level0`)
                 tiles.placeOnTile(legs, tiles.getTileLocation(40, 99))
                 enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
@@ -385,6 +394,7 @@ function the_call (_1hpmode: boolean, messageroll: number) {
                 }
                 map_spawned = true
             } else if (map_size == 3) {
+                oncall = false
                 tiles.setCurrentTilemap(tilemap`levelrahhh`)
                 tiles.placeOnTile(legs, tiles.getTileLocation(64, 0))
                 enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
@@ -500,6 +510,7 @@ function spawn_enemy () {
 }
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
+        oncall = true
         tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
         tiles.setTileAt(location, assets.tile`myTile3`)
         the_call(game.ask("Pick up phone?"), randint(1, 3))
@@ -651,6 +662,7 @@ let enemyspawnblocklist: tiles.Location[] = []
 let legs: Sprite = null
 let notplaying1hpmode = false
 let map_spawned = false
+let oncall = false
 let tutorial = false
 let playerspawned = 0
 let enemyswing = 0
