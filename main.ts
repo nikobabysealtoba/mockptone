@@ -212,6 +212,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 function _1hp_cutscene () {
     sprites.destroyAllSpritesOfKind(SpriteKind.player2)
+    playerspawned = 1
     cutscenecomplete = false
     scene.setBackgroundColor(15)
     tiles.setCurrentTilemap(tilemap`level55`)
