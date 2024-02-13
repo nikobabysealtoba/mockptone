@@ -141,14 +141,14 @@ controller.player3.onButtonEvent(ControllerButton.Down, ControllerButtonEvent.Pr
 })
 scene.onOverlapTile(SpriteKind.player2, assets.tile`meddybeddy`, function (sprite, location) {
     medroll = randint(1, 10)
+    tiles.setTileAt(location, assets.tile`basepurpletile`)
     if (notplaying1hpmode) {
-        tiles.setTileAt(location, assets.tile`basepurpletile`)
         info.changeLifeBy(1)
-        if (medroll == 1) {
-            timer.after(500, function () {
-                tiles.setTileAt(location, assets.tile`godmeddy`)
-            })
-        }
+    }
+    if (medroll == 1) {
+        timer.after(500, function () {
+            tiles.setTileAt(location, assets.tile`godmeddy`)
+        })
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
