@@ -127,7 +127,10 @@ sprites.onOverlap(SpriteKind.player2, SpriteKind.Enemy, function (sprite, otherS
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile30`, function (sprite, location) {
     tiles.placeOnTile(legs, tiles.getTileLocation(63, 93))
     tiles.setTileAt(location, assets.tile`myTile31`)
-    game.splash("You hear an animal cry out from beyond the walls.")
+    game.splash("You hear an animal cry out", "from the other end")
+    if (game.ask("insert blue card?") && bluekeycardcollected) {
+        game.splash("You need to prove yourself.", "beat 1 hp mode.")
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killa, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
@@ -162,7 +165,7 @@ scene.onOverlapTile(SpriteKind.player2, assets.tile`meddybeddy`, function (sprit
     }
 })
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile29`, function (sprite, location) {
-    if (keycardcollected) {
+    if (redkeycardcollected) {
         tiles.setTileAt(location, assets.tile`basepurpletile`)
         tiles.setWallAt(tiles.getTileLocation(location.column, location.row + 1), false)
     }
@@ -310,7 +313,7 @@ sprites.onDestroyed(SpriteKind.Killa, function (sprite) {
     }
 })
 scene.onOverlapTile(SpriteKind.player2, assets.tile`basepurpletile0`, function (sprite, location) {
-    keycardcollected = true
+    redkeycardcollected = true
     tiles.setTileAt(location, assets.tile`basepurpletile`)
 })
 controller.player3.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.Pressed, function () {
@@ -566,6 +569,10 @@ function spawn_enemy () {
         tiles.placeOnTile(Toba_Killa, enemyspawnblocklist.pop())
     }
 }
+scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile32`, function (sprite, location) {
+    bluekeycardcollected = true
+    tiles.setTileAt(location, sprites.builtin.forestTiles10)
+})
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
         oncall = true
@@ -696,7 +703,8 @@ let legs: Sprite = null
 let notplaying1hpmode = false
 let map_spawned = false
 let oncall = false
-let keycardcollected = false
+let bluekeycardcollected = false
+let redkeycardcollected = false
 let tutorial = false
 let playerspawned = 0
 let enemyswing = 0
@@ -707,7 +715,8 @@ start_screen2()
 enemyswing = 1
 playerspawned = 1
 tutorial = true
-keycardcollected = false
+redkeycardcollected = false
+bluekeycardcollected = false
 forever(function () {
     for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
         characterAnimations.loopFrames(
@@ -892,7 +901,7 @@ forever(function () {
     }
 })
 forever(function () {
-    if (smallmap && !(keycardcollected)) {
+    if (smallmap && !(redkeycardcollected)) {
         if (map_spawned && enemyamount == 12 && respawncooldown == 0 && !(secretmap)) {
             respawncooldown = 1
             game.splash("FLOOR CLEARED!")
