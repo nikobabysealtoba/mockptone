@@ -162,8 +162,10 @@ scene.onOverlapTile(SpriteKind.player2, assets.tile`meddybeddy`, function (sprit
     }
 })
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile29`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`basepurpletile`)
-    tiles.setWallAt(tiles.getTileLocation(location.column, location.row + 1), false)
+    if (keycardcollected) {
+        tiles.setTileAt(location, assets.tile`basepurpletile`)
+        tiles.setWallAt(tiles.getTileLocation(location.column, location.row + 1), false)
+    }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (itemheld == true) {
@@ -180,6 +182,7 @@ function spriterotate2 () {
 controller.player3.onButtonEvent(ControllerButton.B, ControllerButtonEvent.Pressed, function () {
     if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
         oncall = false
+        smallmap = true
         notplaying1hpmode = false
         info.setLife(1)
         tiles.setCurrentTilemap(tilemap`levelrahhh`)
@@ -249,6 +252,43 @@ function _1hp_cutscene () {
         })
     })
 }
+scene.onOverlapTile(SpriteKind.player2, sprites.dungeon.doorOpenNorth, function (sprite, location) {
+    if (map_size == 1) {
+        oncall = false
+        tiles.setCurrentTilemap(tilemap`level2`)
+        tiles.placeOnTile(legs, tiles.getTileLocation(61, 99))
+        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+        enemyspawnblockamount = enemyspawnblocklist.length
+        enemyamount = enemyspawnblockamount
+        for (let index = 0; index < enemyspawnblockamount; index++) {
+            spawn_enemy()
+        }
+        map_spawned = true
+    } else if (map_size == 2) {
+        oncall = false
+        tiles.setCurrentTilemap(tilemap`level0`)
+        tiles.placeOnTile(legs, tiles.getTileLocation(40, 99))
+        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+        enemyspawnblockamount = enemyspawnblocklist.length
+        enemyamount = enemyspawnblockamount
+        for (let index = 0; index < enemyspawnblockamount; index++) {
+            spawn_enemy()
+        }
+        map_spawned = true
+    } else if (map_size == 3) {
+        oncall = false
+        smallmap = true
+        tiles.setCurrentTilemap(tilemap`levelrahhh`)
+        tiles.placeOnTile(legs, tiles.getTileLocation(64, 0))
+        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
+        enemyspawnblockamount = enemyspawnblocklist.length
+        enemyamount = enemyspawnblockamount
+        for (let index = 0; index < enemyspawnblockamount; index++) {
+            spawn_enemy()
+        }
+        map_spawned = true
+    }
+})
 sprites.onOverlap(SpriteKind.player2, SpriteKind.SGunner, function (sprite, otherSprite) {
     if (swinging == 1) {
         sprites.destroy(otherSprite)
@@ -292,6 +332,7 @@ controller.player3.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.P
 controller.player3.onButtonEvent(ControllerButton.Left, ControllerButtonEvent.Pressed, function () {
     if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
         oncall = false
+        smallmap = true
         notplaying1hpmode = true
         info.setLife(5)
         tiles.setCurrentTilemap(tilemap`levelrahhh`)
@@ -411,6 +452,7 @@ function the_call (_1hpmode: boolean, messageroll: number) {
                 map_spawned = true
             } else if (map_size == 3) {
                 oncall = false
+                smallmap = true
                 tiles.setCurrentTilemap(tilemap`levelrahhh`)
                 tiles.placeOnTile(legs, tiles.getTileLocation(64, 0))
                 enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
@@ -544,6 +586,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.SGunner, function (sprite, o
 function playersetup () {
     map_spawned = false
     secretmap = false
+    smallmap = false
     respawncooldown = 0
     playerspawned = 0
     angle = 0
@@ -619,33 +662,6 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.rule(Predicate.MovingDown)
     )
 })
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.doorOpenNorth, function (sprite, location) {
-    if (map_size == 1) {
-        tiles.setCurrentTilemap(tilemap`level2`)
-        tiles.placeOnTile(legs, tiles.getTileLocation(61, 99))
-        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
-        enemyspawnblockamount = enemyspawnblocklist.length
-        for (let index = 0; index < enemyspawnblockamount; index++) {
-            spawn_enemy()
-        }
-    } else if (map_size == 2) {
-        tiles.setCurrentTilemap(tilemap`level0`)
-        tiles.placeOnTile(legs, tiles.getTileLocation(40, 99))
-        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
-        enemyspawnblockamount = enemyspawnblocklist.length
-        for (let index = 0; index < enemyspawnblockamount; index++) {
-            spawn_enemy()
-        }
-    } else if (map_size == 3) {
-        tiles.setCurrentTilemap(tilemap`levelrahhh`)
-        tiles.placeOnTile(legs, tiles.getTileLocation(64, 0))
-        enemyspawnblocklist = tiles.getTilesByType(assets.tile`erm`)
-        enemyspawnblockamount = enemyspawnblocklist.length
-        for (let index = 0; index < enemyspawnblockamount; index++) {
-            spawn_enemy()
-        }
-    }
-})
 let mouseanimationcycle = 0
 let bullet2: Dart = null
 let him: Sprite = null
@@ -657,11 +673,12 @@ let Toba_SGunner: Sprite = null
 let Toba_Knight: Sprite = null
 let enemychance = 0
 let INSIDEORNOT = false
-let map_size = 0
 let droppeditemsprite: Sprite = null
 let droppeditemlist: Image[] = []
+let map_size = 0
 let cutscenecomplete = false
 let _1hpmodecomplete = false
+let smallmap = false
 let arms: Sprite = null
 let helditemsprite: Image = null
 let projectile: Sprite = null
@@ -875,17 +892,32 @@ forever(function () {
     }
 })
 forever(function () {
-    if (map_spawned && enemyamount == 0 && respawncooldown == 0 && !(secretmap)) {
-        respawncooldown = 1
-        game.splash("FLOOR CLEARED!")
-        if (!(notplaying1hpmode)) {
-            _1hpmodecomplete = true
+    if (smallmap && !(keycardcollected)) {
+        if (map_spawned && enemyamount == 12 && respawncooldown == 0 && !(secretmap)) {
+            respawncooldown = 1
+            game.splash("FLOOR CLEARED!")
+            if (!(notplaying1hpmode)) {
+                _1hpmodecomplete = true
+            }
+            timer.after(10000, function () {
+                sprites.destroyAllSpritesOfKind(SpriteKind.droppeditem)
+                sprites.destroyAllSpritesOfKind(SpriteKind.player2)
+                playersetup()
+            })
         }
-        timer.after(10000, function () {
-            sprites.destroyAllSpritesOfKind(SpriteKind.droppeditem)
-            sprites.destroyAllSpritesOfKind(SpriteKind.player2)
-            playersetup()
-        })
+    } else {
+        if (map_spawned && enemyamount == 0 && respawncooldown == 0 && !(secretmap)) {
+            respawncooldown = 1
+            game.splash("FLOOR CLEARED!")
+            if (!(notplaying1hpmode)) {
+                _1hpmodecomplete = true
+            }
+            timer.after(10000, function () {
+                sprites.destroyAllSpritesOfKind(SpriteKind.droppeditem)
+                sprites.destroyAllSpritesOfKind(SpriteKind.player2)
+                playersetup()
+            })
+        }
     }
 })
 forever(function () {
