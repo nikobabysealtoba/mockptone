@@ -108,12 +108,15 @@ sprites.onOverlap(SpriteKind.player2, SpriteKind.Enemy, function (sprite, otherS
     if (swinging == 1) {
         sprites.destroy(otherSprite)
     } else {
+        console.log("phobetor is not swinging")
+        console.log(enemyswing)
         if (enemyswing == 1) {
+            console.log("enemyswings")
             enemyswing = 0
-            otherSprite.follow(rotationalsprite, 0)
             info.changeLifeBy(-1)
             timer.after(500, function () {
                 enemyswing = 1
+                console.log("enemy recharges")
             })
             if (info.life() <= 0) {
                 game.gameOver(false)
@@ -684,10 +687,10 @@ let currentarmframe: Image = null
 let originalimage: Image = null
 let rotationalsprite: Sprite = null
 start_screen2()
-enemyswing = 0
+enemyswing = 1
 playerspawned = 1
 tutorial = true
-keycardcollected = false
+keycardcollected = true
 forever(function () {
     for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
         characterAnimations.loopFrames(
@@ -820,7 +823,7 @@ forever(function () {
 })
 forever(function () {
     for (let value22 of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (enemyswing == 1) {
+        if (enemyswing == 0) {
             characterAnimations.loopFrames(
             value22,
             assets.animation`Toba Knight FR Attack`,
@@ -833,9 +836,6 @@ forever(function () {
             70,
             characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
             )
-            timer.after(400, function () {
-                enemyswing = 0
-            })
         } else {
             characterAnimations.loopFrames(
             value22,
@@ -866,12 +866,12 @@ forever(function () {
 })
 forever(function () {
     if (start_screen == false && playerspawned == 0) {
-        spriterotate()
+        spriterotate2()
     }
 })
 forever(function () {
     if (start_screen == false && playerspawned == 0) {
-        spriterotate2()
+        spriterotate()
     }
 })
 forever(function () {
