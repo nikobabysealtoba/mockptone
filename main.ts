@@ -690,7 +690,7 @@ start_screen2()
 enemyswing = 1
 playerspawned = 1
 tutorial = true
-keycardcollected = true
+keycardcollected = false
 forever(function () {
     for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
         characterAnimations.loopFrames(
