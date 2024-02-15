@@ -121,6 +121,11 @@ sprites.onOverlap(SpriteKind.player2, SpriteKind.Enemy, function (sprite, otherS
         }
     }
 })
+scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile30`, function (sprite, location) {
+    tiles.placeOnTile(legs, tiles.getTileLocation(63, 93))
+    tiles.setTileAt(location, assets.tile`myTile31`)
+    game.splash("You hear an animal cry out from beyond the walls.")
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killa, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
     sprites.destroy(sprite)
@@ -152,6 +157,10 @@ scene.onOverlapTile(SpriteKind.player2, assets.tile`meddybeddy`, function (sprit
             tiles.setTileAt(location, assets.tile`godmeddy`)
         })
     }
+})
+scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile29`, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`basepurpletile`)
+    tiles.setWallAt(tiles.getTileLocation(location.column, location.row + 1), false)
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (itemheld == true) {
@@ -256,6 +265,10 @@ sprites.onDestroyed(SpriteKind.Killa, function (sprite) {
     if (map_spawned) {
         enemyamount += -1
     }
+})
+scene.onOverlapTile(SpriteKind.player2, assets.tile`basepurpletile0`, function (sprite, location) {
+    keycardcollected = true
+    tiles.setTileAt(location, assets.tile`basepurpletile`)
 })
 controller.player3.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.Pressed, function () {
     if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
@@ -663,6 +676,7 @@ let legs: Sprite = null
 let notplaying1hpmode = false
 let map_spawned = false
 let oncall = false
+let keycardcollected = false
 let tutorial = false
 let playerspawned = 0
 let enemyswing = 0
@@ -673,6 +687,7 @@ start_screen2()
 enemyswing = 0
 playerspawned = 1
 tutorial = true
+keycardcollected = false
 forever(function () {
     for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
         characterAnimations.loopFrames(
