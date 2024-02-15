@@ -127,9 +127,14 @@ sprites.onOverlap(SpriteKind.player2, SpriteKind.Enemy, function (sprite, otherS
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile30`, function (sprite, location) {
     tiles.placeOnTile(legs, tiles.getTileLocation(63, 93))
     tiles.setTileAt(location, assets.tile`myTile31`)
-    game.splash("You hear an animal cry out", "from the other end")
-    if (game.ask("insert blue card?") && bluekeycardcollected) {
-        game.splash("You need to prove yourself.", "beat 1 hp mode.")
+    if (controller.player2.isPressed(ControllerButton.B)) {
+        game.splash("You hear an animal cry out", "from the other end")
+        if (game.ask("insert blue card?") && bluekeycardcollected) {
+            game.splash("There's static on the other end.")
+            game.splash("You need to prove yourself.", "beat 1 hp mode.")
+            game.splash("An orange card comes", "out of a slot")
+            orangekeycardcollected = true
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Killa, function (sprite, otherSprite) {
@@ -216,7 +221,7 @@ controller.player3.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
     }
 })
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile11`, function (sprite, location) {
-    if (controller.player2.isPressed(ControllerButton.B)) {
+    if (controller.player2.isPressed(ControllerButton.B) && orangekeycardcollected) {
         tiles.setTileAt(location, assets.tile`myTile28`)
         tiles.placeOnTile(rotationalsprite, tiles.getTileLocation(location.column, location.row + 1))
         controller.moveSprite(legs, 0, 0)
@@ -703,6 +708,7 @@ let legs: Sprite = null
 let notplaying1hpmode = false
 let map_spawned = false
 let oncall = false
+let orangekeycardcollected = false
 let bluekeycardcollected = false
 let redkeycardcollected = false
 let tutorial = false
@@ -717,6 +723,7 @@ playerspawned = 1
 tutorial = true
 redkeycardcollected = false
 bluekeycardcollected = false
+orangekeycardcollected = false
 forever(function () {
     for (let value of sprites.allOfKind(SpriteKind.SGunner)) {
         characterAnimations.loopFrames(
