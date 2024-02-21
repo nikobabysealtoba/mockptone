@@ -125,12 +125,12 @@ sprites.onOverlap(SpriteKind.player2, SpriteKind.Enemy, function (sprite, otherS
     }
 })
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile30`, function (sprite, location) {
-    tiles.placeOnTile(legs, tiles.getTileLocation(63, 93))
-    tiles.setTileAt(location, assets.tile`myTile31`)
     if (controller.player2.isPressed(ControllerButton.B)) {
+        tiles.placeOnTile(legs, tiles.getTileLocation(63, 93))
+        tiles.setTileAt(location, assets.tile`myTile31`)
         game.splash("You hear an animal cry out", "from the other end")
         if (game.ask("insert blue card?") && bluekeycardcollected) {
-            game.splash("There's static on the other end.")
+            game.splash("There's static on", "the other end.")
             game.splash("You need to prove yourself.", "beat 1 hp mode.")
             game.splash("An orange card comes", "out of a slot")
             orangekeycardcollected = true
@@ -227,6 +227,9 @@ scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile11`, function (sprite,
         controller.moveSprite(legs, 0, 0)
         _1hpmodecomplete = false
         _1hp_cutscene()
+    } else {
+        game.splash("You can't pick up", "the phone.")
+        game.splash("You see a keycard", "slot on it though.")
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -316,10 +319,6 @@ sprites.onDestroyed(SpriteKind.Killa, function (sprite) {
     if (map_spawned) {
         enemyamount += -1
     }
-})
-scene.onOverlapTile(SpriteKind.player2, assets.tile`basepurpletile0`, function (sprite, location) {
-    redkeycardcollected = true
-    tiles.setTileAt(location, assets.tile`basepurpletile`)
 })
 controller.player3.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.Pressed, function () {
     if (playerspawned == 0 && (!(oncall) && !(map_spawned))) {
@@ -673,6 +672,10 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     70,
     characterAnimations.rule(Predicate.MovingDown)
     )
+})
+scene.onOverlapTile(SpriteKind.player2, assets.tile`redcard`, function (sprite, location) {
+    redkeycardcollected = true
+    tiles.setTileAt(location, assets.tile`basepurpletile`)
 })
 let mouseanimationcycle = 0
 let bullet2: Dart = null
