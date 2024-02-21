@@ -522,6 +522,10 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
 scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
     sprites.destroy(sprite)
 })
+scene.onOverlapTile(SpriteKind.player2, assets.tile`bluecard`, function (sprite, location) {
+    bluekeycardcollected = true
+    tiles.setTileAt(location, sprites.builtin.forestTiles10)
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (swinging == 0 && playerspawned == 0) {
         swinging = 1
@@ -574,10 +578,6 @@ function spawn_enemy () {
         tiles.placeOnTile(Toba_Killa, enemyspawnblocklist.pop())
     }
 }
-scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile32`, function (sprite, location) {
-    bluekeycardcollected = true
-    tiles.setTileAt(location, sprites.builtin.forestTiles10)
-})
 scene.onOverlapTile(SpriteKind.player2, assets.tile`myTile0`, function (sprite, location) {
     if (controller.player2.isPressed(ControllerButton.B)) {
         oncall = true
